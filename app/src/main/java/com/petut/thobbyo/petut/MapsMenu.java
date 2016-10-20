@@ -1,5 +1,6 @@
 package com.petut.thobbyo.petut;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Activity;
 
@@ -31,6 +32,11 @@ public class MapsMenu extends Activity implements OnMapReadyCallback {
 
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override

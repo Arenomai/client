@@ -19,7 +19,6 @@ public class Acceuil extends AppCompatActivity{
             public void onClick(View view){
                 changeView(findViewById(R.id.activity_menu));
             }
-
        });
     }
 

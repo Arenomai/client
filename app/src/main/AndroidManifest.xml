@@ -9,7 +9,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Menu" />
-        <activity android:name=".MapsMenu" />
+        <activity android:name=".MapsMenu"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".Acceuil">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
