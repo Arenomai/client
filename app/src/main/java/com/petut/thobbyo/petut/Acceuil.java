@@ -24,7 +24,7 @@ public class Acceuil extends AppCompatActivity{
     }
 
     public void changeView(View vi){
-        Intent intent = new Intent(Acceuil.this, Menu.class);
+        Intent intent = new Intent(Acceuil.this, MapsMenu.class);
         startActivity(intent);
     }
 }
