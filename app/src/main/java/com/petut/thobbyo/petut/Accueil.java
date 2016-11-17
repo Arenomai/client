@@ -1,11 +1,10 @@
 package com.petut.thobbyo.petut;
 
-import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,23 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 
-public class Acceuil extends AppCompatActivity {
+public class Accueil extends AppCompatActivity {
     public class Chaussette extends AsyncTask<String, String, String> {
         TextView tcp_text = (TextView) findViewById(R.id.tcp_text);
 
@@ -37,21 +30,16 @@ public class Acceuil extends AppCompatActivity {
         protected String doInBackground(String... arg) {
             try {
                 Socket chaussette = new Socket("thgros.fr", 4242);
-                InputStream in = chaussette.getInputStream();
-                OutputStream out = chaussette.getOutputStream();
-                out.write(arg[0].getBytes());
 
-                int nbytes;
-                String reponse = "";
-                byte buf[] = new byte[512];
+                PrintWriter out = new PrintWriter(chaussette.getOutputStream(), true);
+                out.println(arg[0]);
 
-                /*while ((nbytes = in.read(buf)) != -1) {
-                    reponse += new String(buf).substring(0, nbytes);
-                }*/
+                BufferedReader in = new BufferedReader(new InputStreamReader(chaussette.getInputStream()));
+                String response = in.readLine();
 
                 chaussette.close();
 
-                return arg[0];
+                return response;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -69,6 +57,7 @@ public class Acceuil extends AppCompatActivity {
     TextView tcp_text;
     Button tcp_envoi;
     Button plan;
+    Button tcp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +68,20 @@ public class Acceuil extends AppCompatActivity {
         tcp_text = (TextView) findViewById(R.id.tcp_text);
         tcp_envoi = (Button) findViewById(R.id.tcp_envoi);
         plan = (Button) findViewById(R.id.plan);
+        tcp = (Button) findViewById(R.id.tcp);
 
+        tcp.setTypeface(null, Typeface.BOLD);
         tcp_envoi.setOnClickListener(new View.OnClickListener() {
             @Override
-            //tcp_req.getText().toString()
             public void onClick(View view) {
-                new Chaussette().execute("select * from test");
+                new Chaussette().execute(tcp_req.getText().toString());
             }
         });
 
         plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Acceuil.this, MapsMenu.class);
+                Intent intent = new Intent(Accueil.this, MapsMenu.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -104,7 +94,7 @@ public class Acceuil extends AppCompatActivity {
      */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("Acceuil Page") // TODO: Define a title for the content shown.
+                .setName("Accueil Page") // TODO: Define a title for the content shown.
                 // TODO: Make sure this auto-generated URL is correct.
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
