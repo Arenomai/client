@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MapsMenu"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".Acceuil">
+        <activity android:name=".Accueil">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

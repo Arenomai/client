@@ -2,6 +2,7 @@ package com.petut.thobbyo.petut;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -16,6 +17,7 @@ public class MapsMenu extends Activity implements OnMapReadyCallback {
 
     private MapView mMapView;
     Button tcp;
+    Button plan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,12 @@ public class MapsMenu extends Activity implements OnMapReadyCallback {
         });
 
         tcp = (Button) findViewById(R.id.tcp);
+        plan = (Button) findViewById(R.id.plan);
+        plan.setTypeface(null, Typeface.BOLD);
         tcp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapsMenu.this, Acceuil.class);
+                Intent intent = new Intent(MapsMenu.this, Accueil.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
