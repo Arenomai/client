@@ -11,7 +11,8 @@ import android.widget.LinearLayout;
 /**
  * TODO: document your custom view class.
  */
-public class linearMenuView extends LinearLayout {
+public class linearMenuView extends LinearLayout implements View.OnClickListener {
+    Button bouton_tcp = (Button) findViewById(R.id.tcp);
     Button bouton_plan = (Button) findViewById(R.id.plan);
     Button bouton_cartes = (Button) findViewById(R.id.cartes);
     Button btn_defense = (Button) findViewById(R.id.defense);
@@ -36,8 +37,13 @@ public class linearMenuView extends LinearLayout {
         inflate(getContext(), R.layout.sample_linear_menu_view, this);
     }
 
-    public void onClick(Context context, View view) {
-        Intent myIntent = new Intent(context, MapsMenu.class);
-        context.startActivity(myIntent);
+    @Override
+    public void onClick(View view) {
+        bouton_plan.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bouton_plan.setText("OK");
+            }
+        });
     }
 }

@@ -34,17 +34,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Requête"
         android:ems="10"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/tcp_req"
         android:layout_toLeftOf="@+id/tcp_envoi"
-        android:layout_toStartOf="@+id/tcp_envoi" />
+        android:layout_toStartOf="@+id/tcp_envoi"
+        android:fontFamily="monospace" />
 
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view4"
@@ -55,5 +54,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="18sp"
-        android:fontFamily="monospace" />
+        android:fontFamily="monospace"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:background="?attr/colorPrimaryDark"
+        android:layout_margin="16dp" />
 </RelativeLayout>
