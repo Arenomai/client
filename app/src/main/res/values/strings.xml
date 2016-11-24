@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Arenomai</string>
-    <string name="style_mapbox_streets">mapbox://styles/elementw/civs7p1y900bj2kqkv71t0kwr</string>
+    <string name="style_mapbox_streets">mapbox://styles/mapbox/streets-v9</string>
 </resources>
