@@ -55,7 +55,6 @@
         android:layout_alignParentEnd="true"
         android:textSize="18sp"
         android:fontFamily="monospace"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:background="?attr/colorPrimaryDark"
         android:layout_margin="16dp" />
 </RelativeLayout>
