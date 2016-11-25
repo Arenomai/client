@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,7 +14,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 
-public class MapsMenu extends Activity implements OnMapReadyCallback {
+public class MapsMenu extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mMapView;
     Button tcp;
