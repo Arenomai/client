@@ -19,11 +19,16 @@ public class Cartes {
         this.posX = posX;
         this.posY = posY;
         this.img = img;
+        this.img.resize(taille, taille);
         this.vitesse = vitesse;
     }
 
     public void setTaille(int Ntaille){
         img.setTailleImage(Ntaille, Ntaille);
+    }
+
+    public void setTaille(int Wtaille, int Htaille){
+        img.setTailleImage(Wtaille, Htaille);
     }
 
     public void setPos(int posX, int posY){

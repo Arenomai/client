@@ -5,6 +5,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
  */
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class GameLoopThread extends Thread
 {
