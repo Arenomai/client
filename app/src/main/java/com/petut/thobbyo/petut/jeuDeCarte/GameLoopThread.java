@@ -6,8 +6,8 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 
 import android.graphics.Canvas;
 
-public class GameLoopThread extends Thread {
-
+public class GameLoopThread extends Thread
+{
     // on définit arbitrairement le nombre d'images par secondes à 30
     private final static int FRAMES_PER_SECOND = 30;
 

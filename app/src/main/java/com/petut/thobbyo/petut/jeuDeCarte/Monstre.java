@@ -7,8 +7,9 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 public class Monstre extends Cartes{
 
 
-    public Monstre(int taille, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
-        super(taille, posX, posY, img, vitesse);
+    public Monstre(int taille, int posX, int posY, int vitesse, int def, int damage, String nom) {
+        super(taille, posX, posY);
+        this.vitesse = vitesse;
         this.def = def;
         this.damage = damage;
         this.nom = nom;
