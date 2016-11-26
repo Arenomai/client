@@ -6,22 +6,15 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.app.Activity;
-
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.petut.thobbyo.petut.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 // SurfaceView est une surface de dessin.
 // référence : http://developer.android.com/reference/android/view/SurfaceView.html
@@ -30,7 +23,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // déclaration de l'objet définissant la boucle principale de déplacement et de rendu
     private GameLoopThread gameLoopThread;
     private Image fond;
-    List<Cartes> monstre = new ArrayList<Cartes>();
+    List<Cartes> cartes = new ArrayList<Cartes>();
 
     // création de la surface de dessin
     public GameView(Context context) {
@@ -38,19 +31,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         gameLoopThread = new GameLoopThread(this);
 
-        fond = new Image(this.getContext(), R.mipmap.chat_mignon_02);
+        fond = new Image(this.getContext(), R.mipmap.cadrillage);
     }
 
     // Fonction qui "dessine" un écran de jeu
     public void doDraw(Canvas canvas) {
         if(canvas==null) {return;}
 
-        // on efface l'écran, en blanc
+        // Replace le fond de l'écrant
         fond.draw(canvas, 0, 0);
 
-        for(Cartes a : monstre){
+        // Dessine les carte et les fait ce déplacer.
+        for(Cartes a : cartes){
             a.dessiner(canvas);
-            a.moov(0, -50);
+            a.moov(0, -fond.getH()/9);
         }
 
 
@@ -75,16 +69,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // Gère les touchés sur l'écran
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int currentX = (int)event.getX();
-        int currentY = (int)event.getY();
+        //Position du doig sur l'écrant
+        int currentX = (int)event.getX() ;
+        int currentY = (int)event.getY() ;
+
+        //position que prendra la carte
+        int x, y;
+        //On trouve cette position en fonction de la taille du fond d'écrant
+        x = (currentX/(fond.getW()/5))*fond.getW()/5 ;
+        y = (currentY/(fond.getH()/9))*fond.getH()/9 ;
 
         switch (event.getAction()) {
 
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
-                Monstre atta = new Monstre(100, currentX, currentY, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                Monstre atta = new Monstre(fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
 
-                monstre.add(atta);
+                cartes.add(atta);
                 break;
         }
         return false;
