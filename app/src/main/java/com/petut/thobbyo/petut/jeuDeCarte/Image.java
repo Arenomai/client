@@ -13,9 +13,12 @@ import android.graphics.drawable.Drawable;
 public class Image
 {
     private BitmapDrawable img = null; // image
-    private int R_mipmap; // image contenue
+    private int R_mipmap;
+    private int x, y; // coordonnées x,y de l'image
     private int IW, IH; // largeur et hauteur de l'image
     private int wEcran, hEcran; // largeur et hauteur de l'écran en pixels
+
+    private int speedX=0, speedY=0; // Permetra de déplacer l'image
 
     // contexte de l'application Android
     // il servira à accéder aux ressources
@@ -23,6 +26,7 @@ public class Image
 
     // Constructeur d'une image
     public Image(final Context c, int mipmap) {
+        x=0; y=0; // position de départ
         mContext=c; // sauvegarde du contexte
         R_mipmap = mipmap;
     }
@@ -42,9 +46,34 @@ public class Image
         img = setImage(mContext, R_mipmap, IW, IH);
     }
 
+    public void moov(int mx, int my){
+        x += mx;
+        y += my;
+    }
+
     public void setTailleImage(int W, int H) {
         IW = W;
         IH = H;
+    }
+
+    // définit la coordonnée X de l'image
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    // définit la coordonnée Y de l'image
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    // retourne la coordonnée X de l'image
+    public int getX() {
+        return x;
+    }
+
+    // retourne la coordonnée Y de l'image
+    public int getY() {
+        return y;
     }
 
     // retourne la largeur de l'image en pixel
@@ -58,7 +87,7 @@ public class Image
     }
 
     // on dessine l'image, en x et y
-    public void draw(Canvas canvas, int x, int y)
+    public void draw(Canvas canvas)
     {
         if(img==null) {return;}
         canvas.drawBitmap(img.getBitmap(), x, y, null);
