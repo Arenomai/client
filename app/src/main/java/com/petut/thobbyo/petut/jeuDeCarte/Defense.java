@@ -1,14 +1,13 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
 /**
- * Created by Thobbyo on 10/10/2016.
+ * Created by Thobbyo on 21/11/2016.
  */
 
-public class Monstre extends Cartes{
+public class Defense extends Cartes {
 
-
-    public Monstre(int taille, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
-        super(taille, posX, posY, img, vitesse);
+    public Defense(int taille, int posX, int posY, int def, int damage, String nom, Image img) {
+        super(taille, posX, posY, img, 0);
         this.def = def;
         this.damage = damage;
         this.nom = nom;
@@ -19,7 +18,7 @@ public class Monstre extends Cartes{
     }
 
     public void setVitesse(int vitesse) {
-        this.vitesse = vitesse;
+        this.vitesse = 0;
     }
 
     public void setDef(int def) {
