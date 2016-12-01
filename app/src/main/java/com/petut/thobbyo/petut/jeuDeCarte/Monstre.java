@@ -7,11 +7,12 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 public class Monstre extends Cartes{
 
 
-    public Monstre(int taille, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
-        super(taille, posX, posY, img, vitesse);
+    public Monstre(int tailleH, int tailleW, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
+        super(tailleH, tailleW, posX, posY, img, nom);
         this.def = def;
         this.damage = damage;
         this.nom = nom;
+        this.vitesse = vitesse;
     }
 
     public void setNom(String nom) {
@@ -44,6 +45,10 @@ public class Monstre extends Cartes{
 
     public String getNom() {
         return nom;
+    }
+
+    public void moov(){
+        posY -= tailleH;
     }
 
     private int vitesse;

@@ -8,27 +8,27 @@ import android.graphics.Canvas;
 
 public class Cartes {
 
-    private int vitesse;
-    private int taille;
-    private int posX;
-    private int posY;
-    private Image img;
+    protected int tailleW;
+    protected int tailleH;
+    protected int posX;
+    protected int posY;
+    protected Image img;
 
-    public Cartes(int taille, int posX, int posY, Image img, int vitesse){
-        this.taille = taille;
+    public Cartes(int tailleH, int tailleW, int posX, int posY, Image img, String nom){
+        this.tailleH = tailleH;
+        this.tailleW = tailleW;
         this.posX = posX;
         this.posY = posY;
         this.img = img;
-        this.img.resize(taille, taille);
-        this.vitesse = vitesse;
+        this.img.resize(tailleW, tailleH);
     }
 
     public void setTaille(int Ntaille){
         img.setTailleImage(Ntaille, Ntaille);
     }
 
-    public void setTaille(int Wtaille, int Htaille){
-        img.setTailleImage(Wtaille, Htaille);
+    public void setTaille(int Htaille, int Wtaille){
+        img.setTailleImage(Htaille, Wtaille);
     }
 
     public void setPos(int posX, int posY){
@@ -36,20 +36,11 @@ public class Cartes {
         this.posY = posY;
     }
 
-    public void setVitesse(int vitesse){this.vitesse = vitesse ;}
-
     public void setImg(Image img){this.img = img ;}
-
-    public void moov(int mx, int my){
-        posX += mx;
-        posY += my;
-    }
 
     public void dessiner(Canvas canvas){img.draw(canvas, posX, posY);}
 
     public Image getImg(){return img ;}
-
-    public int getVitesse(){return vitesse ;}
 
     public int getPosX(){
         return posX;

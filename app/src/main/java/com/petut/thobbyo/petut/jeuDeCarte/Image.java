@@ -64,4 +64,4 @@ public class Image
         canvas.drawBitmap(img.getBitmap(), x, y, null);
     }
 
-} // public class Balle
+}
