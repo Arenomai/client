@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.petut.thobbyo.petut.jeuDeCarte.GameView;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,7 +59,9 @@ public class Accueil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_acceuil);
+        GameView game = new GameView(this);
+        setContentView(game);
+        /*setContentView(R.layout.activity_acceuil);
 
         tcp_req = (EditText) findViewById(R.id.tcp_req);
         tcp_text = (TextView) findViewById(R.id.tcp_text);
@@ -80,7 +84,7 @@ public class Accueil extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     @Override

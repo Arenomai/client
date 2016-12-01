@@ -6,8 +6,8 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 
 public class Defense extends Cartes {
 
-    public Defense(int taille, int posX, int posY, int def, int damage, String nom, Image img) {
-        super(taille, posX, posY, img, 0);
+    public Defense(int tailleH, int tailleW,  int posX, int posY, int def, int damage, String nom, Image img) {
+        super(tailleH, tailleW, posX, posY, img, nom);
         this.def = def;
         this.damage = damage;
         this.nom = nom;

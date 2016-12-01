@@ -23,7 +23,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // déclaration de l'objet définissant la boucle principale de déplacement et de rendu
     private GameLoopThread gameLoopThread;
     private Image fond;
-    List<Cartes> cartes = new ArrayList<Cartes>();
+    List<Monstre> monstres = new ArrayList<Monstre>();
+    List<Defense> defenses = new ArrayList<Defense>();
+    List<Sort> sorts = new ArrayList<Sort>();
 
     // création de la surface de dessin
     public GameView(Context context) {
@@ -42,16 +44,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         fond.draw(canvas, 0, 0);
 
         // Dessine les carte et les fait ce déplacer.
-        for(Cartes a : cartes){
+        for(Monstre a : monstres){
             a.dessiner(canvas);
-            a.moov(0, -fond.getH()/9);
+        }
+        for(Defense a : defenses){
+            a.dessiner(canvas);
+        }
+        for(Sort a : sorts){
+            a.dessiner(canvas);
         }
 
 
-    }
-
-    public void DrawCartre(Cartes car, int deplacementX, int deplacementY){
-        car.moov(deplacementX, deplacementY);
     }
 
     // Fonction obligatoire de l'objet SurfaceView
@@ -83,9 +86,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
-                Monstre atta = new Monstre(fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
 
-                cartes.add(atta);
+                for(Monstre a : monstres){
+                    a.moov();
+                }
+
+                Monstre atta = new Monstre(fond.getH()/9, fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
+
+                monstres.add(atta);
                 break;
         }
         return false;
