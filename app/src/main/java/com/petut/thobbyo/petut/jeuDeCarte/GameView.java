@@ -6,6 +6,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -40,20 +41,33 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void doDraw(Canvas canvas) {
         if(canvas==null) {return;}
 
+        // on efface l'écran, en blanc
+        canvas.drawColor(Color.WHITE);
+
         // Replace le fond de l'écrant
         fond.draw(canvas, 0, 0);
 
+        ArrayList<Cartes> suppr = new ArrayList<Cartes>();
         // Dessine les carte et les fait ce déplacer.
         for(Monstre a : monstres){
             a.dessiner(canvas);
+
+            if (a.getPosY() < 0){
+                suppr.add(a);
+            }
         }
+
         for(Defense a : defenses){
             a.dessiner(canvas);
         }
+
         for(Sort a : sorts){
             a.dessiner(canvas);
         }
 
+        for(Cartes a : suppr){
+            monstres.remove(a);
+        }
 
     }
 
@@ -87,13 +101,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
 
+                //Déplace touts les monstre
                 for(Monstre a : monstres){
                     a.moov();
                 }
+                if(y < fond.getH()){
+                    //Crée un monstre
+                    Monstre atta = new Monstre(fond.getH()/9, fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
 
-                Monstre atta = new Monstre(fond.getH()/9, fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
-
-                monstres.add(atta);
+                    //On ajoute les monstre a la listes
+                    monstres.add(atta);
+                }
                 break;
         }
         return false;
@@ -121,6 +139,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // nous obtenons ici la largeur/hauteur de l'écran en pixels
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
-        fond.resize(w,h); // on définit la taille de l'image selon la taille de l'écran
+        fond.resize(w*1, h*0.85); // on définit la taille de l'image selon la taille de l'écran
     }
 } // class GameView
