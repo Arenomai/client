@@ -9,11 +9,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -22,6 +25,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.petut.thobbyo.petut.jeuDeCarte.GameView;
 
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -58,6 +62,17 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 mapboxMap.addMarker(marqueurFourviere);
                 mapboxMap.addMarker(marqueurIci);
+
+                mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(@NonNull Marker marker) {
+                        if(marker.getTitle() == "Fourvière") {
+                            GameView game = new GameView(PlanActivity.this);
+                            setContentView(game);
+                        }
+                        return true;
+                    }
+                });
             }
         });
 

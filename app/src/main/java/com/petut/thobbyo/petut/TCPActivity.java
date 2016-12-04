@@ -60,8 +60,6 @@ public class TCPActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*GameView game = new GameView(this);
-        setContentView(game);*/
         setContentView(R.layout.activity_tcp);
 
         tcp_req = (EditText) findViewById(R.id.tcp_req);
