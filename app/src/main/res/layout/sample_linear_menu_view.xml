@@ -1,47 +1,75 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
+    android:padding="10dp">
 
-    <Button
-        android:text="#"
-        android:layout_width="35dp"
-        android:layout_height="wrap_content"
+    <ImageButton
         android:id="@+id/tcp"
-        android:layout_margin="3dp" />
-
-    <Button
-        android:text="Plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/tcp"
+        android:layout_margin="10dp" />
+
+    <ImageButton
         android:id="@+id/plan"
-        android:layout_weight="1"
-        android:layout_margin="3dp" />
-
-    <Button
-        android:text="Moi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/plan"
+        android:layout_margin="10dp" />
+
+    <ImageButton
         android:id="@+id/profil"
-        android:layout_weight="1"
-        android:layout_margin="3dp" />
-
-    <Button
-        android:text="Armes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/moi"
+        android:layout_margin="10dp" />
+
+    <ImageButton
         android:id="@+id/defense"
-        android:layout_weight="1"
-        android:layout_margin="3dp" />
-
-    <Button
-        android:text="Cartes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/armes"
+        android:layout_margin="10dp" />
+
+    <ImageButton
         android:id="@+id/cartes"
-        android:layout_weight="1"
-        android:layout_margin="3dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/cartes"
+        android:layout_margin="10dp" />
 </LinearLayout>
