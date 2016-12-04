@@ -36,6 +36,6 @@ public class CarteView extends LinearLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.sample_arme_view, this);
+        inflate(getContext(), R.layout.sample_carte_view, this);
     }
 }

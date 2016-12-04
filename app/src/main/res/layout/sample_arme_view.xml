@@ -3,13 +3,14 @@
     android:orientation="vertical"
     android:layout_alignParentLeft="true"
     android:padding="10dp"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
+    android:id="@+id/layout_arme">
 
     <ImageButton
-        android:id="@+id/toto"
+        android:id="@+id/image_arme"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="0.5"
@@ -17,14 +18,24 @@
         android:scaleType="fitCenter"
         android:onClick="clickOne"
         android:background="@null"
-        android:src="@drawable/hericendre_ball"
+        android:src="@drawable/attaque_epee_fer"
         android:layout_width="match_parent" />
+
+    <TextView
+        android:text="Arme bidule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titre"
+        android:layout_weight="0.5"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textStyle="normal|bold" />
 
     <TextView
         android:text="Dégat : 5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/desc"
         android:layout_weight="0.5"
         android:textAlignment="center"
         android:textColor="@android:color/black" />
