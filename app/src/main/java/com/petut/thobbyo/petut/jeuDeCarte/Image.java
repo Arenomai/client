@@ -36,9 +36,9 @@ public class Image
     }
 
     // redimensionnement de l'image selon la largeur/hauteur de l'écran passés en paramètre
-    public void resize(int wScreen, int hScreen) {
-        IW = wScreen;
-        IH = hScreen;
+    public void resize(double wScreen, double hScreen) {
+        IW = (int)wScreen;
+        IH = (int)hScreen;
         img = setImage(mContext, R_mipmap, IW, IH);
     }
 
