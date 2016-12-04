@@ -4,7 +4,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
  * Created by Thobbyo on 10/10/2016.
  */
 
-public class Monstre extends Cartes{
+public class Monstre extends Carte {
 
 
     public Monstre(int tailleH, int tailleW, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
