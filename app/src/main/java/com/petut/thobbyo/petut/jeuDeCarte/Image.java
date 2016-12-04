@@ -35,6 +35,18 @@ public class Image
         return new BitmapDrawable(c.getResources(), Bitmap.createScaledBitmap(bitmap, w, h, true));
     }
 
+    public BitmapDrawable setImage(final Context c, final int ressource) {
+        Drawable dr = c.getResources().getDrawable(ressource);
+        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+        return new BitmapDrawable(c.getResources(), Bitmap.createBitmap(bitmap));
+    }
+
+    public void load() {
+        img = setImage(mContext, R_mipmap);
+        IW = img.getBitmap().getWidth();
+        IH = img.getBitmap().getHeight();
+    }
+
     // redimensionnement de l'image selon la largeur/hauteur de l'écran passés en paramètre
     public void resize(double wScreen, double hScreen) {
         IW = (int)wScreen;
@@ -55,6 +67,14 @@ public class Image
     // retourne la hauteur de l'image en pixel
     public int getH() {
         return IH;
+    }
+
+    public BitmapDrawable getBitmapDrawable() {
+        return img;
+    }
+
+    public Bitmap getBitmap() {
+        return img.getBitmap();
     }
 
     // on dessine l'image, en x et y

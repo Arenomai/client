@@ -1,12 +1,10 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
-/**
- * Created by Thobbyo on 10/10/2016.
- */
-
-public class Cartes {
+public class Carte {
 
     protected int tailleW;
     protected int tailleH;
@@ -14,13 +12,13 @@ public class Cartes {
     protected int posY;
     protected Image img;
 
-    public Cartes(int tailleH, int tailleW, int posX, int posY, Image img, String nom){
+    public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom){
         this.tailleH = tailleH;
         this.tailleW = tailleW;
         this.posX = posX;
         this.posY = posY;
         this.img = img;
-        this.img.resize(tailleW, tailleH);
+        this.img.load();
     }
 
     public void setTaille(int Ntaille){
@@ -38,7 +36,9 @@ public class Cartes {
 
     public void setImg(Image img){this.img = img ;}
 
-    public void dessiner(Canvas canvas){img.draw(canvas, posX, posY);}
+    public void dessiner(Canvas canvas) {
+        canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
+    }
 
     public Image getImg(){return img ;}
 

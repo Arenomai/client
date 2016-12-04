@@ -4,7 +4,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
  * Created by Thobbyo on 01/12/2016.
  */
 
-public class Sort extends Cartes{
+public class Sort extends Carte {
 
     private int damage;
 

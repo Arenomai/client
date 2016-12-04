@@ -4,7 +4,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
  * Created by Thobbyo on 21/11/2016.
  */
 
-public class Defense extends Cartes {
+public class Defense extends Carte {
 
     public Defense(int tailleH, int tailleW,  int posX, int posY, int def, int damage, String nom, Image img) {
         super(tailleH, tailleW, posX, posY, img, nom);

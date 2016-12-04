@@ -1,13 +1,12 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
-/**
- * Created by Thobbyo on 11/11/2016.
- */
-
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,41 +15,88 @@ import com.petut.thobbyo.petut.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 // SurfaceView est une surface de dessin.
 // référence : http://developer.android.com/reference/android/view/SurfaceView.html
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    private static final String TAG = "GameView";
 
     // déclaration de l'objet définissant la boucle principale de déplacement et de rendu
     private GameLoopThread gameLoopThread;
-    private Image fond;
-    List<Monstre> monstres = new ArrayList<Monstre>();
-    List<Defense> defenses = new ArrayList<Defense>();
-    List<Sort> sorts = new ArrayList<Sort>();
+    private Bitmap fondCouleur;
+    private Paint peintureGrille;
+    private float[] pointsGrille;
+    private final Matrix matricePlateau = new Matrix();
+    private int largeurPlateau, hauteurPlateau;
+    List<Monstre> monstres = new ArrayList<>();
+    List<Defense> defenses = new ArrayList<>();
+    List<Sort> sorts = new ArrayList<>();
 
-    // création de la surface de dessin
+    // Création de la surface de dessin
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
+        setTaillePlateau(5, 9);
         gameLoopThread = new GameLoopThread(this);
 
-        fond = new Image(this.getContext(), R.mipmap.cadrillage);
+        peintureGrille = new Paint();
+        peintureGrille.setStyle(Paint.Style.STROKE);
+        peintureGrille.setStrokeWidth(0.01f);
+        peintureGrille.setColor(Color.WHITE);
+    }
+
+    private void setTaillePlateau(int largeur, int hauteur) {
+        largeurPlateau = largeur;
+        hauteurPlateau = hauteur;
+
+        pointsGrille = new float[(largeurPlateau+hauteurPlateau+2)*4];
+        final float fx = 1.f / largeurPlateau;
+        for (int x = 0; x < largeurPlateau + 1; ++x) {
+            pointsGrille[x*4] = pointsGrille[x*4 + 2] = x * fx;
+            pointsGrille[x*4 + 1] = 0;
+            pointsGrille[x*4 + 3] = 1;
+        }
+        final int off = (largeurPlateau + 1) * 4;
+        final float fy = 1.f / hauteurPlateau;
+        for (int y = 0; y < hauteurPlateau + 1; ++y) {
+            pointsGrille[off + y*4 + 1] = pointsGrille[off + y*4 + 3] = y * fy;
+            pointsGrille[off + y*4] = 0;
+            pointsGrille[off + y*4 + 2] = 1;
+        }
+    }
+
+    private void dessinerGrille(Canvas canvas) {
+        canvas.drawLines(pointsGrille, peintureGrille);
     }
 
     // Fonction qui "dessine" un écran de jeu
     public void doDraw(Canvas canvas) {
-        if(canvas==null) {return;}
+        if (canvas == null) { return; }
 
-        // on efface l'écran, en blanc
+        // On efface l'écran
         canvas.drawColor(Color.WHITE);
+        if (fondCouleur != null)
+            canvas.drawBitmap(fondCouleur, 0, 0, null);
 
-        // Replace le fond de l'écrant
-        fond.draw(canvas, 0, 0);
+        // Dessine la grille
+        canvas.save();
+        canvas.concat(matricePlateau);
 
-        ArrayList<Cartes> suppr = new ArrayList<Cartes>();
-        // Dessine les carte et les fait ce déplacer.
-        for(Monstre a : monstres){
+        dessinerGrille(canvas);
+
+        ArrayList<Carte> suppr = new ArrayList<>();
+        // Dessine les carte et les fait se déplacer.
+        for (Monstre a : monstres) {
+            Matrix matriceMonstre = new Matrix();
+            matriceMonstre.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+            matriceMonstre.postTranslate((float) a.getPosX() / largeurPlateau,
+                    (float) a.getPosY() / hauteurPlateau);
+            canvas.save();
+            canvas.concat(matriceMonstre);
+            // android.util.Log.d(TAG, "Dessin monstre (" + a.getPosX() + ", " + a.getPosY() + ")");
             a.dessiner(canvas);
+            canvas.restore();
 
             if (a.getPosY() < 0){
                 suppr.add(a);
@@ -65,10 +111,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             a.dessiner(canvas);
         }
 
-        for(Cartes a : suppr){
+        for(Carte a : suppr){
             monstres.remove(a);
         }
-
+        canvas.restore();
     }
 
     // Fonction obligatoire de l'objet SurfaceView
@@ -86,30 +132,34 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // Gère les touchés sur l'écran
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //Position du doig sur l'écrant
-        int currentX = (int)event.getX() ;
-        int currentY = (int)event.getY() ;
+        // Position du doigt sur l'écrant
+        int currentX = (int) event.getX();
+        int currentY = (int) event.getY();
 
-        //position que prendra la carte
-        int x, y;
-        //On trouve cette position en fonction de la taille du fond d'écrant
-        x = (currentX/(fond.getW()/5))*fond.getW()/5 ;
-        y = (currentY/(fond.getH()/9))*fond.getH()/9 ;
+        // Position que prendra la carte
+        final Matrix invMatricePlateau = new Matrix();
+        if (!matricePlateau.invert(invMatricePlateau)) {
+            throw new RuntimeException("matricePlateau n'est pas inversible");
+        }
+        float[] points = new float[] { currentX, currentY };
+        invMatricePlateau.mapPoints(points);
+        // On trouve cette position en fonction de la taille du plateau
+        final int x = (int) Math.floor(points[0] * largeurPlateau),
+                  y = (int) Math.floor(points[1] * hauteurPlateau);
 
         switch (event.getAction()) {
-
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
-
-                //Déplace touts les monstre
-                for(Monstre a : monstres){
+                // Déplace tous les monstres
+                for (Monstre a : monstres) {
                     a.moov();
                 }
-                if(y < fond.getH()){
-                    //Crée un monstre
-                    Monstre atta = new Monstre(fond.getH()/9, fond.getW()/5, x, y, 1, 0, 2, "Monstre pas bo", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
+                    // Crée un monstre
+                    Monstre atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
+                            new Image(this.getContext(), R.mipmap.monstre_sourire));
 
-                    //On ajoute les monstre a la listes
+                    // On ajoute le monstre à la liste
                     monstres.add(atta);
                 }
                 break;
@@ -139,6 +189,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // nous obtenons ici la largeur/hauteur de l'écran en pixels
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
-        fond.resize(w*1, h*0.85); // on définit la taille de l'image selon la taille de l'écran
+        int cote = w > h ? h : w;
+        matricePlateau.reset();
+        matricePlateau.postScale(cote, cote);
+
+        int[] pixels = new int[w * h];
+        Random random = new Random();
+        final int baseColor = ContextCompat.getColor(getContext(), R.color.arenomai_fond_plateau);
+        final int baseColorR = Color.red(baseColor), baseColorG = Color.green(baseColor),
+                baseColorB = Color.blue(baseColor);
+        for (int idx = 0; idx < w * h; ++idx) {
+            int add = random.nextInt(32);
+            pixels[idx] = Color.argb(255, baseColorR + add, baseColorG + add, baseColorB + add);
+        }
+        fondCouleur = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
+        fondCouleur.setPixels(pixels, 0, w, 0, 0, w, h);
     }
 } // class GameView
