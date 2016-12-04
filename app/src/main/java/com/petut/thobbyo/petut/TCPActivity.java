@@ -126,11 +126,11 @@ public class TCPActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
-        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+        super.onStart();
     }
 
     @Override
     public void onStop() {
-        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+        super.onStop();
     }
 }
