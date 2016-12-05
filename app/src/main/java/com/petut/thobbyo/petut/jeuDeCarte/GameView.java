@@ -153,8 +153,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
                 // Déplace tous les monstres
-                for (Monstre a : monstres) {
-                    a.moov();
+                synchronized (monstres) {
+                    for (Monstre a : monstres) {
+                        a.moov();
+                    }
                 }
                 if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
                     // Crée un monstre
