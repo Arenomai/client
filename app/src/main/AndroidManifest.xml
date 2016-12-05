@@ -34,7 +34,8 @@
         <activity android:name=".ProfilActivity" />
         <activity android:name=".ArmesActivity" />
         <activity android:name=".CartesActivity" />
-        <activity android:name=".TCPActivity" />
+        <activity android:name=".TCPActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
