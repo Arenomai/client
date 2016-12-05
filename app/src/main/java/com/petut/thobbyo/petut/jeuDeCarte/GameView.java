@@ -87,19 +87,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         ArrayList<Carte> suppr = new ArrayList<>();
         // Dessine les carte et les fait se déplacer.
-        for (Monstre a : monstres) {
-            Matrix matriceMonstre = new Matrix();
-            matriceMonstre.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
-            matriceMonstre.postTranslate((float) a.getPosX() / largeurPlateau,
-                    (float) a.getPosY() / hauteurPlateau);
-            canvas.save();
-            canvas.concat(matriceMonstre);
-            // android.util.Log.d(TAG, "Dessin monstre (" + a.getPosX() + ", " + a.getPosY() + ")");
-            a.dessiner(canvas);
-            canvas.restore();
+        synchronized (monstres) {
+            for (Monstre a : monstres) {
+                Matrix matriceMonstre = new Matrix();
+                matriceMonstre.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+                matriceMonstre.postTranslate((float) a.getPosX() / largeurPlateau,
+                        (float) a.getPosY() / hauteurPlateau);
+                canvas.save();
+                canvas.concat(matriceMonstre);
+                // android.util.Log.d(TAG, "Dessin monstre (" + a.getPosX() + ", " + a.getPosY() + ")");
+                a.dessiner(canvas);
+                canvas.restore();
 
-            if (a.getPosY() < 0){
-                suppr.add(a);
+                if (a.getPosY() < 0){
+                    suppr.add(a);
+                }
             }
         }
 
@@ -160,7 +162,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             new Image(this.getContext(), R.mipmap.monstre_sourire));
 
                     // On ajoute le monstre à la liste
-                    monstres.add(atta);
+                    synchronized (monstres) {
+                        monstres.add(atta);
+                    }
                 }
                 break;
         }
