@@ -195,9 +195,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // nous obtenons ici la largeur/hauteur de l'écran en pixels
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
-        int cote = w > h ? h : w;
         matricePlateau.reset();
-        matricePlateau.postScale(cote, cote);
+        final float ratioEcran = ((float)w) / h,
+                ratioPlateau = ((float)largeurPlateau) / hauteurPlateau;
+        if (ratioEcran > ratioPlateau) {
+            final float largeur = ((float)h) / hauteurPlateau * largeurPlateau;
+            matricePlateau.postScale(largeur, h);
+            matricePlateau.postTranslate((w - largeur) / 2, 0);
+        } else {
+            final float hauteur = ((float)w) / largeurPlateau * hauteurPlateau;
+            matricePlateau.postScale(w, hauteur);
+            matricePlateau.postTranslate(0, (h - hauteur) / 2);
+        }
 
         int[] pixels = new int[w * h];
         Random random = new Random();
