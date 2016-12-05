@@ -1,40 +1,22 @@
 package com.petut.thobbyo.petut;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.petut.thobbyo.petut.jeuDeCarte.GameView;
 
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mMapView;
-    ImageButton tcp;
-    ImageButton plan;
-    ImageButton profil;
-    ImageButton defense;
-    ImageButton cartes;
 
     double longitude = 0.0;
     double latitude = 0.0;
@@ -73,55 +55,6 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     }
                 });
-            }
-        });
-
-        tcp = (ImageButton) findViewById(R.id.tcp);
-        plan = (ImageButton) findViewById(R.id.plan);
-        profil = (ImageButton) findViewById(R.id.profil);
-        defense = (ImageButton) findViewById(R.id.defense);
-        cartes = (ImageButton) findViewById(R.id.cartes);
-
-        tcp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PlanActivity.this, TCPActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-            }
-        });
-
-        plan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        profil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PlanActivity.this, ProfilActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-            }
-        });
-
-        defense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PlanActivity.this, ArmesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-            }
-        });
-
-        cartes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PlanActivity.this, CartesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
             }
         });
     }

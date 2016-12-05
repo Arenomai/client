@@ -24,7 +24,7 @@
         <view
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            class="com.petut.thobbyo.petut.linearMenuView"
+            class="com.petut.thobbyo.petut.MainMenuView"
             android:id="@+id/view"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
