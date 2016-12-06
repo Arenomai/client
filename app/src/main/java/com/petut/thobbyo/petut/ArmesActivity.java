@@ -18,6 +18,7 @@ import com.petut.thobbyo.petut.Armes.Attaque.HacheFer;
 import com.petut.thobbyo.petut.Armes.Attaque.HacheOr;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierBois;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierBoisFer;
+import com.petut.thobbyo.petut.Armes.Defense.BouclierBoisOr;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierOrDiamant;
 import com.petut.thobbyo.petut.Armes.Defense.CalendrierPTT;
 
@@ -73,6 +74,7 @@ public class ArmesActivity extends AppCompatActivity {
         listeArmes.add(new CalendrierPTT());
         listeArmes.add(new BouclierBois());
         listeArmes.add(new BouclierBoisFer());
+        listeArmes.add(new BouclierBoisOr());
         listeArmes.add(new BouclierOrDiamant());
 
         final Arme[] selectionArmes = new Arme[2]; // Attaque, défense

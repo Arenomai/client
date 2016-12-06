@@ -33,7 +33,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editText" />
+            android:id="@+id/editText"
+            android:text="test" />
 
         <Space
             android:layout_width="match_parent"
@@ -51,7 +52,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText3" />
+            android:id="@+id/editText3"
+            android:text="test" />
 
         <Space
             android:layout_width="match_parent"
