@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 public class MainMenuView extends LinearLayout {
     private class ButtonData {
         int idRes;
@@ -72,6 +74,13 @@ public class MainMenuView extends LinearLayout {
                 new ButtonData(R.id.cartes, CartesActivity.class)
         };
 
+        ArrayList<Integer> resBoutonsSelection = new ArrayList<Integer>();
+        resBoutonsSelection.add(R.drawable.menu_tcp_sel);
+        resBoutonsSelection.add(R.drawable.menu_plan_sel);
+        resBoutonsSelection.add(R.drawable.menu_moi_sel);
+        resBoutonsSelection.add(R.drawable.menu_armes_sel);
+        resBoutonsSelection.add(R.drawable.menu_cartes_sel);
+
         final Activity hostActivity = getActivity();
         Class<? extends Activity> hostActivityClass = null;
         if (hostActivity != null) {
@@ -90,7 +99,8 @@ public class MainMenuView extends LinearLayout {
                 }
             });
             if (hostActivityClass != null && hostActivityClass.equals(bouton.activite)) {
-                bouton.btn.setColorFilter(new LightingColorFilter(Color.rgb(255, 128, 128), 0));
+                ///bouton.btn.setColorFilter(new LightingColorFilter(Color.rgb(220, 220, 220), 0));
+                bouton.btn.setImageResource(resBoutonsSelection.get(i));
             }
         }
     }
