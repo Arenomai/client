@@ -14,6 +14,8 @@ import com.petut.thobbyo.petut.Armes.Attaque.EpeeBois;
 import com.petut.thobbyo.petut.Armes.Attaque.EpeeDiamant;
 import com.petut.thobbyo.petut.Armes.Attaque.EpeeFer;
 import com.petut.thobbyo.petut.Armes.Attaque.EpeeOr;
+import com.petut.thobbyo.petut.Armes.Attaque.HacheFer;
+import com.petut.thobbyo.petut.Armes.Attaque.HacheOr;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierBois;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierBoisFer;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierOrDiamant;
@@ -61,6 +63,8 @@ public class ArmesActivity extends AppCompatActivity {
 
         ArrayList<Arme>  listeArmes = new ArrayList<Arme>();
 
+        listeArmes.add(new HacheFer());
+        listeArmes.add(new HacheOr());
         listeArmes.add(new EpeeBois());
         listeArmes.add(new EpeeFer());
         listeArmes.add(new EpeeOr());
