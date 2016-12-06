@@ -6,11 +6,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CarteView extends LinearLayout {
-    public CarteView(Context context, int degat) {
+    public CarteView(Context context) {
         super(context);
         init();
-        TextView texte = (TextView) findViewById(R.id.textView);
-        texte.setText("Carte info truc : "+Integer.toString(degat));
     }
 
     public CarteView(Context context, AttributeSet attrs) {

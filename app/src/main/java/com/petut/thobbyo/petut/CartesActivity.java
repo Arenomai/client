@@ -48,10 +48,10 @@ public class CartesActivity extends AppCompatActivity {
         }
 
         ArrayList<CarteView> listeCartes = new ArrayList<CarteView>();
-        listeCartes.add(new CarteView(CartesActivity.this,1));
-        listeCartes.add(new CarteView(CartesActivity.this,2));
-        listeCartes.add(new CarteView(CartesActivity.this,3));
-        listeCartes.add(new CarteView(CartesActivity.this,2));
+        listeCartes.add(new CarteView(CartesActivity.this));
+        listeCartes.add(new CarteView(CartesActivity.this));
+        listeCartes.add(new CarteView(CartesActivity.this));
+        listeCartes.add(new CarteView(CartesActivity.this));
 
         grille.setAdapter(new CarteAdapter(listeCartes));
     }
