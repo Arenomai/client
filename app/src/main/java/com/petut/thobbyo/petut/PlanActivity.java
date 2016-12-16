@@ -17,6 +17,7 @@ import com.petut.thobbyo.petut.jeuDeCarte.GameView;
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mMapView;
+    private OnLocationChangedListener mListener;
 
     double longitude = 0.0;
     double latitude = 0.0;
@@ -58,17 +59,42 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+    
+    @Override
+    public void onMapReady(MapboxMap mapboxMap) {
+        LatLng marker = getLocation(marker);
+        mapboxMap.addMarker(new MarkerOptions().position(marker).title("Position du joueur"));
+        mapboxMap.moveCamera(MarkerOptions.position(marker));
+    }
+    
+    public void onLocationChanged(Location location)
+    {
+        if( mListener != null )
+        {
+            mListener.onLocationChanged( location );
+
+            //Move the camera to the user's location once it's available!
+            mapboxMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+        }
+    }
+    
+    @Override
+    public void onLocationChanged(Marker marker)
+    {
+        if( mListener != null )
+        {
+            mListener.onLocationChanged(marker.getPosition());
+
+            //Move the camera to the user's location and zoom in!
+            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition()), 12.0f));
+        }
+    }
+    
+    
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onMapReady(MapboxMap mapboxMap) {
-        /* LatLng sydney = new LatLng(-34, 151);
-        mMapView.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMapView.moveCamera(CameraUpdateFactory.newLatLng(sydney)); */
     }
 
     @Override
