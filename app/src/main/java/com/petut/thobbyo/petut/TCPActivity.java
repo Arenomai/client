@@ -1,36 +1,51 @@
 package com.petut.thobbyo.petut;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
+import com.petut.thobbyo.petut.net.Connection;
+import com.petut.thobbyo.petut.net.MessageType;
+import com.petut.thobbyo.petut.net.OutMessage;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class TCPActivity extends AppCompatActivity {
     public class Chaussette extends AsyncTask<String, String, String> {
+        private Context ctx;
         TextView tcp_text = (TextView) findViewById(R.id.tcp_text);
+
+        public Chaussette(Context ctx) {
+            this.ctx = ctx;
+        }
 
         @Override
         protected String doInBackground(String... arg) {
             try {
-                Socket chaussette = new Socket("thgros.fr", 4242);
+                final Connection co = new Connection();
 
-                PrintWriter out = new PrintWriter(chaussette.getOutputStream(), true);
-                out.println(arg[0]);
+                publishProgress("Connecting...");
+                final SharedPreferences sp = ctx.getSharedPreferences(Application.PREF_DEFAULT, 0);
+                co.connect(sp.getString("serverAddr", "localhost"), sp.getInt("serverPort", 4242));
+                publishProgress("Connected!");
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(chaussette.getInputStream()));
-                String response = in.readLine();
+                publishProgress("Sending auth message");
+                OutMessage omsg = new OutMessage(MessageType.Auth);
+                omsg.writeI32(123456);
+                co.write(omsg);
 
-                chaussette.close();
+                publishProgress("Disconnecting...");
+                co.close();
+                publishProgress("Disconnected");
 
-                return response;
+                return "";
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -38,9 +53,26 @@ public class TCPActivity extends AppCompatActivity {
             }
         }
 
+        protected void addLine(String str) {
+            tcp_text.append(str + "\n");
+            tcp_text.post(new Runnable() {
+                public void run() {
+                    final int scrollAmount = tcp_text.getLayout()
+                            .getLineTop(tcp_text.getLineCount())
+                            - tcp_text.getHeight();
+                    tcp_text.scrollTo(0, scrollAmount > 0 ? scrollAmount : 0);
+                }
+            });
+        }
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            addLine(progress[0]);
+        }
+
         @Override
         protected void onPostExecute(String reponse) {
-            tcp_text.setText(tcp_text.getText().toString() + reponse + "\n");
+            addLine(reponse);
         }
     }
 
@@ -56,7 +88,14 @@ public class TCPActivity extends AppCompatActivity {
 
         tcp_req = (EditText) findViewById(R.id.tcp_req);
         tcp_text = (TextView) findViewById(R.id.tcp_text);
+        tcp_text.setMovementMethod(new ScrollingMovementMethod());
         tcp_envoi = (Button) findViewById(R.id.tcp_envoi);
+        tcp_envoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Chaussette(getApplicationContext()).execute();
+            }
+        });
     }
 
     @Override
