@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.LightingColorFilter;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,7 +22,6 @@ public class MainMenuView extends LinearLayout {
             this.activite = activite;
         }
     }
-    private ButtonData[] boutons;
 
     public MainMenuView(Context context) {
         super(context);
@@ -42,14 +38,14 @@ public class MainMenuView extends LinearLayout {
         init();
     }
 
-    private ButtonData getButtonByActivity(@NonNull Class<?> activite) {
+    /* private ButtonData getButtonByActivity(@NonNull Class<?> activite) {
         for (ButtonData btn : boutons) {
             if (btn.activite.equals(activite)) {
                 return btn;
             }
         }
         return null;
-    }
+    } */
 
     // http://stackoverflow.com/questions/8276634/android-get-hosting-activity-from-a-view
     private Activity getActivity() {
@@ -66,7 +62,7 @@ public class MainMenuView extends LinearLayout {
     private void init() {
         inflate(getContext(), R.layout.sample_linear_menu_view, this);
 
-        boutons = new ButtonData[] {
+        final ButtonData[] boutons = new ButtonData[] {
                 new ButtonData(R.id.tcp, TCPActivity.class),
                 new ButtonData(R.id.plan, PlanActivity.class),
                 new ButtonData(R.id.profil, ProfilActivity.class),
@@ -74,7 +70,7 @@ public class MainMenuView extends LinearLayout {
                 new ButtonData(R.id.cartes, CartesActivity.class)
         };
 
-        ArrayList<Integer> resBoutonsSelection = new ArrayList<Integer>();
+        ArrayList<Integer> resBoutonsSelection = new ArrayList<>();
         resBoutonsSelection.add(R.drawable.menu_tcp_sel);
         resBoutonsSelection.add(R.drawable.menu_plan_sel);
         resBoutonsSelection.add(R.drawable.menu_moi_sel);
