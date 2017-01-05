@@ -1,3 +1,4 @@
+/*
 package com.petut.thobbyo.petut;
 
 import java.util.Timer;
@@ -139,3 +140,4 @@ public class GetCurrentLocation {
         public abstract void gotLocation(Location location);
     }
 }
+*/

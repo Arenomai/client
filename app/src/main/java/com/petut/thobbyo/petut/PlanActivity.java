@@ -1,26 +1,42 @@
 package com.petut.thobbyo.petut;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationListener;
+import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.petut.thobbyo.petut.jeuDeCarte.GameView;
 
+import static com.petut.thobbyo.petut.R.id.view;
+
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mMapView;
-    private OnLocationChangedListener mListener;
+    private MapboxMap map;
+    private FloatingActionButton floatingActionButton;
+    private LocationServices locationServices;
 
-    double longitude = 0.0;
-    double latitude = 0.0;
+    private static final int PERMISSIONS_LOCATION = 0;
+
+    double longitude = 4.82169;
+    double latitude = 45.76228;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +50,15 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
+        locationServices = LocationServices.getLocationServices(PlanActivity.this);
+
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+                map = mapboxMap;
+
                 MarkerViewOptions marqueurIci = new MarkerViewOptions().position(new LatLng(latitude, longitude));
+                marqueurIci.title("Votre position");
 
                 MarkerViewOptions marqueurFourviere = new MarkerViewOptions().position(new LatLng(45.76228, 4.82169));
                 marqueurFourviere.title("Fourvière");
@@ -56,41 +77,27 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     }
                 });
+
+                CameraPosition position = new CameraPosition.Builder()
+                        .target(new LatLng(latitude, longitude))
+                        .zoom(15) // Sets the zoom
+                        .tilt(30) // Set the camera tilt
+                        .build(); // Creates a CameraPosition from the builder
+
+                mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 2000);
+            }
+        });
+
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (map != null) {
+                    toggleGps(!map.isMyLocationEnabled());
+                }
             }
         });
     }
-    
-    @Override
-    public void onMapReady(MapboxMap mapboxMap) {
-        LatLng marker = getLocation(marker);
-        mapboxMap.addMarker(new MarkerOptions().position(marker).title("Position du joueur"));
-        mapboxMap.moveCamera(MarkerOptions.position(marker));
-    }
-    
-    public void onLocationChanged(Location location)
-    {
-        if( mListener != null )
-        {
-            mListener.onLocationChanged( location );
-
-            //Move the camera to the user's location once it's available!
-            mapboxMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-        }
-    }
-    
-    @Override
-    public void onLocationChanged(Marker marker)
-    {
-        if( mListener != null )
-        {
-            mListener.onLocationChanged(marker.getPosition());
-
-            //Move the camera to the user's location and zoom in!
-            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition()), 12.0f));
-        }
-    }
-    
-    
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -125,5 +132,65 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onMapReady(MapboxMap mapboxMap) {
+
+    }
+
+
+    private void toggleGps(boolean enableGps) {
+        if (enableGps) {
+            // Check if user has granted location permission
+            if (!locationServices.areLocationPermissionsGranted()) {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
+            } else {
+                enableLocation(true);
+            }
+        } else {
+            enableLocation(false);
+        }
+    }
+
+    private void enableLocation(boolean enabled) {
+        if (enabled) {
+            // If we have the last location of the user, we can move the camera to that position.
+            Location lastLocation = locationServices.getLastLocation();
+            if (lastLocation != null) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation), 16));
+            }
+
+            locationServices.addLocationListener(new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    if (location != null) {
+                        // Move the map camera to where the user location is and then remove the
+                        // listener so the camera isn't constantly updating when the user location
+                        // changes. When the user disables and then enables the location again, this
+                        // listener is registered again and will adjust the camera once again.
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location), 16));
+                        locationServices.removeLocationListener(this);
+                    }
+                }
+            });
+            floatingActionButton.setImageResource(R.drawable.ic_location_disabled);
+        } else {
+            floatingActionButton.setImageResource(R.drawable.ic_my_location);
+        }
+        // Enable or disable the location layer on the map
+        map.setMyLocationEnabled(enabled);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableLocation(true);
+            }
+        }
     }
 }
