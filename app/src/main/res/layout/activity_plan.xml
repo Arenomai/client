@@ -19,16 +19,6 @@
             mapbox:attribution_enabled="false"
             mapbox:rotate_enabled="false"
             mapbox:tilt_enabled="false">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/location_toggle_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="16dp"
-                srcCompat="@drawable/ic_my_location"
-                tools:ignore="VectorDrawableCompat"
-                backgroundTint="@color/colorAccent"/>
         </com.mapbox.mapboxsdk.maps.MapView>
 
         <view
