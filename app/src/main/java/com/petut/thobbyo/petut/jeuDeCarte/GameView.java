@@ -29,6 +29,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private float[] pointsGrille;
     private final Matrix matricePlateau = new Matrix();
     private int largeurPlateau, hauteurPlateau;
+    private int choix = 0;
     List<Monstre> monstres = new ArrayList<>();
     List<Defense> defenses = new ArrayList<>();
     List<Sort> sorts = new ArrayList<>();
@@ -84,6 +85,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.concat(matricePlateau);
 
         dessinerGrille(canvas);
+
+        Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "");
+        Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "");
+
+        Matrix Adef = new Matrix();
+        Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+        Adef.postTranslate(0.1f, 1.05f);
+        canvas.save();
+        canvas.concat(Adef);
+        def.dessiner(canvas);
+        canvas.restore();
+
+        Matrix Aatta = new Matrix();
+        Aatta.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+        Aatta.postTranslate(0.5f, 1.05f);
+        canvas.save();
+        canvas.concat(Aatta);
+        atta.dessiner(canvas);
+        canvas.restore();
+
 
         ArrayList<Carte> suppr = new ArrayList<>();
         // Dessine les carte et les fait se déplacer.
@@ -153,6 +174,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
                 // Déplace tous les monstres
+
                 synchronized (monstres) {
                     for (Monstre a : monstres) {
                         a.moov();
@@ -200,7 +222,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ratioPlateau = ((float)largeurPlateau) / hauteurPlateau;
         if (ratioEcran > ratioPlateau) {
             final float largeur = ((float)h) / hauteurPlateau * largeurPlateau;
-            matricePlateau.postScale(largeur, h);
+            matricePlateau.postScale(largeur*0.85f, h*0.85f);
             matricePlateau.postTranslate((w - largeur) / 2, 0);
         } else {
             final float hauteur = ((float)w) / largeurPlateau * hauteurPlateau;

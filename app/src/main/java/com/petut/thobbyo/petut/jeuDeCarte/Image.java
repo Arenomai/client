@@ -7,6 +7,7 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -81,7 +82,8 @@ public class Image
     public void draw(Canvas canvas, int x, int y)
     {
         if(img==null) {return;}
-        canvas.drawBitmap(img.getBitmap(), x, y, null);
+        //canvas.drawBitmap(img.getBitmap(), x, y, null);
+        canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
     }
 
 }

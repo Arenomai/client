@@ -13,7 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-public class GetCurrentLocation {
+public class GetCurrentLocation extends Context {
     Timer timer1;
     LocationManager lm;
     LocationResult locationResult;
