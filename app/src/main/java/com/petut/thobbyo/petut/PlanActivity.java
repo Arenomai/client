@@ -35,9 +35,6 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private static final int PERMISSIONS_LOCATION = 0;
 
-    double longitude = 4.82169;
-    double latitude = 45.76228;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +47,8 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
+        // Positionnement GPS librement inspiré : https://www.mapbox.com/android-sdk/examples/user-location/
+
         locationServices = LocationServices.getLocationServices(PlanActivity.this);
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -57,20 +56,18 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
 
-                MarkerViewOptions marqueurIci = new MarkerViewOptions().position(new LatLng(latitude, longitude));
-                marqueurIci.title("Votre position");
+                toggleGps(true);
 
                 MarkerViewOptions marqueurFourviere = new MarkerViewOptions().position(new LatLng(45.76228, 4.82169));
                 marqueurFourviere.title("Fourvière");
                 marqueurFourviere.snippet("La tour métallique de Fourvière, le plus haut édifice de la ville en altitude.");
 
                 mapboxMap.addMarker(marqueurFourviere);
-                mapboxMap.addMarker(marqueurIci);
 
                 mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
-                        if(marker.getTitle() == "Fourvière") {
+                        if (marker.getTitle() == "Fourvière") {
                             GameView game = new GameView(PlanActivity.this);
                             setContentView(game);
                         }
@@ -78,22 +75,14 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
 
-                CameraPosition position = new CameraPosition.Builder()
-                        .target(new LatLng(latitude, longitude))
-                        .zoom(15) // Sets the zoom
-                        .tilt(30) // Set the camera tilt
-                        .build(); // Creates a CameraPosition from the builder
+                if(locationServices.getLastLocation() != null) {
+                    CameraPosition position = new CameraPosition.Builder()
+                            .target(new LatLng(locationServices.getLastLocation()))
+                            .zoom(15) // Sets the zoom
+                            .tilt(30) // Set the camera tilt
+                            .build(); // Creates a CameraPosition from the builder
 
-                mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 2000);
-            }
-        });
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (map != null) {
-                    toggleGps(!map.isMyLocationEnabled());
+                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 2000);
                 }
             }
         });
@@ -176,9 +165,6 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             });
-            floatingActionButton.setImageResource(R.drawable.ic_location_disabled);
-        } else {
-            floatingActionButton.setImageResource(R.drawable.ic_my_location);
         }
         // Enable or disable the location layer on the map
         map.setMyLocationEnabled(enabled);
