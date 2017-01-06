@@ -36,6 +36,8 @@ public class ArmeView extends LinearLayout {
         layout.setBackgroundResource(R.color.arenomai_parchemin);
     }
 
+    public void setSelectionLongClic() { layout.setBackgroundResource(R.color.mapbox_blue); }
+
     public void removeSelection() {
         layout.setBackgroundResource(0);
     }
