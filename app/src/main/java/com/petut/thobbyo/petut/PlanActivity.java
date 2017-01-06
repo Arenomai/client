@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -22,8 +23,17 @@ import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.petut.thobbyo.petut.Armes.Arme;
+import com.petut.thobbyo.petut.Armes.Attaque.EpeeBois;
+import com.petut.thobbyo.petut.Armes.Attaque.HacheFer;
+import com.petut.thobbyo.petut.Armes.Attaque.HacheOr;
+import com.petut.thobbyo.petut.Armes.Defense.BouclierBois;
+import com.petut.thobbyo.petut.Armes.ObjetPlan;
 import com.petut.thobbyo.petut.jeuDeCarte.GameView;
 
+import java.util.ArrayList;
+
+import static com.petut.thobbyo.petut.R.id.markerViewContainer;
 import static com.petut.thobbyo.petut.R.id.view;
 
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -53,23 +63,40 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(MapboxMap mapboxMap) {
+            public void onMapReady(final MapboxMap mapboxMap) {
                 map = mapboxMap;
 
                 toggleGps(true);
 
-                MarkerViewOptions marqueurFourviere = new MarkerViewOptions().position(new LatLng(45.76228, 4.82169));
-                marqueurFourviere.title("Fourvière");
-                marqueurFourviere.snippet("La tour métallique de Fourvière, le plus haut édifice de la ville en altitude.");
+                // Placement provisoire d'objets qui viendront du serveur
 
-                mapboxMap.addMarker(marqueurFourviere);
+                final ArrayList<ObjetPlan> listeObjets = new ArrayList<>();
+
+                listeObjets.add(new ObjetPlan(new HacheFer(), 45, 4, false));
+                listeObjets.add(new ObjetPlan(new BouclierBois(), 45, 5, false));
+                listeObjets.add(new ObjetPlan(new HacheOr(), 44, 4, true));
+
+                for(int i=0 ; i<listeObjets.size() ; i++) {
+                    ObjetPlan obj = listeObjets.get(i);
+                    MarkerViewOptions marqueurObj = new MarkerViewOptions().position(new LatLng(obj.getLatitude(), obj.getLongitude()));
+                    marqueurObj.title(obj.getObjet().getTitre());
+                    marqueurObj.snippet(obj.getObjet().getTitre());
+                    marqueurObj.getMarker().setId(i);
+                    mapboxMap.addMarker(marqueurObj);
+                }
 
                 mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
-                        if (marker.getTitle() == "Fourvière") {
+
+                        ObjetPlan obj = listeObjets.get((int) marker.getId());
+                        if(obj.getSeMerite() == true) {
                             GameView game = new GameView(PlanActivity.this);
                             setContentView(game);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Objet récupéré : "+obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
+                            mapboxMap.removeMarker(marker);
                         }
                         return true;
                     }
