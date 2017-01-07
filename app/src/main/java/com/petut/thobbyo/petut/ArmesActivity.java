@@ -26,7 +26,10 @@ import com.petut.thobbyo.petut.Armes.Defense.BouclierOrDiamant;
 import com.petut.thobbyo.petut.Armes.Defense.CalendrierPTT;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ArmesActivity extends AppCompatActivity {
     GridView grille;
@@ -66,41 +69,44 @@ public class ArmesActivity extends AppCompatActivity {
 
         grille = (GridView) findViewById(R.id.grille);
 
-        final ArrayList<Arme>  listeArmes = new ArrayList<Arme>();
+        final TreeMap<Integer, Arme> listeArmes = new TreeMap<>();
+        final ArrayList<ArmeView> listeArmeView = new ArrayList<>();
+        final Integer[] selectionArmes = new Integer[2]; // Attaque, défense
 
-        listeArmes.add(new HacheFer());
-        listeArmes.add(new HacheOr());
-        listeArmes.add(new EpeeBois());
-        listeArmes.add(new EpeeFer());
-        listeArmes.add(new EpeeOr());
-        listeArmes.add(new EpeeDiamant());
-        listeArmes.add(new BouleMagique());
-        listeArmes.add(new CalendrierPTT());
-        listeArmes.add(new BouclierBois());
-        listeArmes.add(new BouclierBoisFer());
-        listeArmes.add(new BouclierBoisOr());
-        listeArmes.add(new BouclierOrDiamant());
+        // POUR LE SERVEUR : récupérer l'inventaire des armes
+        listeArmes.put(10, new HacheFer());
+        listeArmes.put(11, new HacheOr());
+        listeArmes.put(12, new EpeeBois());
+        listeArmes.put(13, new EpeeFer());
+        listeArmes.put(14, new EpeeOr());
+        listeArmes.put(15, new EpeeDiamant());
+        listeArmes.put(16, new BouleMagique());
+        listeArmes.put(117, new CalendrierPTT());
+        listeArmes.put(118, new BouclierBois());
+        listeArmes.put(119, new BouclierBoisFer());
+        listeArmes.put(1110, new BouclierBoisOr());
+        listeArmes.put(1111, new BouclierOrDiamant());
 
-        final Arme[] selectionArmes = new Arme[2]; // Attaque, défense
+        // POUR LE SERVEUR, dire quelles sont les deux armes sélectionnées.
+        selectionArmes[0] = 11;
+        selectionArmes[1] = 1110;
 
-        selectionArmes[0] = listeArmes.get(1);
-        selectionArmes[1] = listeArmes.get(10);
-
-        final ArrayList<ArmeView> listeArmeView = new ArrayList<ArmeView>();
-
-        for(int i=0 ;i<listeArmes.size() ; i++) {
+        for (int i : listeArmes.keySet()) {
             final Arme arme = listeArmes.get(i);
-
             final ArmeView vue = new ArmeView(ArmesActivity.this, arme.getTitre(), arme.getTaux(), arme.getAttaque(), arme.getRes_image());
-
             ImageButton imagevue = (ImageButton) vue.findViewById(R.id.image_arme);
+
             vue.setId(i);
             imagevue.setId(i);
+
+            if(selectionArmes[0] == i || selectionArmes[1] == i) {
+                vue.setSelection();
+            }
 
             imagevue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectionArmes[(arme.getAttaque()) ? 1 : 0] = arme; // Attaque, défense
+                    selectionArmes[(arme.getAttaque()) ? 1 : 0] = view.getId(); // Attaque, défense
                     for (int i = 0; i < listeArmeView.size(); i++) {
                         if (listeArmeView.get(i).getAttaque() == arme.getAttaque()) {
                             listeArmeView.get(i).removeSelection();
@@ -110,49 +116,34 @@ public class ArmesActivity extends AppCompatActivity {
                 }
             });
 
-            /*imagevue.setOnLongClickListener(new View.OnLongClickListener() {
+            imagevue.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     Arme monArme = listeArmes.get(view.getId());
 
-                   *//* Iterator ite = listeArmes.iterator();
-
-                    while(!(ite.next().equals(monArme)));
-                    *//*
-
-                    // Si attaque cliquée-long
-                    if(monArme.getAttaque()) {
-                        int nbattaque = 0;
-
-                        for(int i=0 ; i<listeArmes.size() ; i++) {
-                            if(listeArmes.get(i).getAttaque()) {
-                                nbattaque++;
-                            }
-                        }
-
-                        Toast.makeText(getApplicationContext(), "attaque", Toast.LENGTH_SHORT).show();
-                        if(nbattaque >= 1) {
-                            Toast.makeText(getApplicationContext(), "Objet déposé : "+monArme.getTitre(), Toast.LENGTH_SHORT).show();
-
-                            *//*if(selectionArmes[0].equals(monArme)) {
-                                if(ite.hasNext()) {
-                                    Arme prochaineArme = (Arme) ite.next();
-                                    selectionArmes[0] = prochaineArme;
-                                    listeArmeView.get(listeArmes.indexOf(prochaineArme)).setSelection();
-                                }
-                            }*//*
-                            listeArmeView.remove(view.getId());
-                            listeArmes.remove(view.getId());
-                        }
+                    if(selectionArmes[0] == (int) view.getId() || selectionArmes[1] == (int) view.getId()) {
+                        Toast.makeText(getApplicationContext(), "Dépose interdite, objet en cours d'usage", Toast.LENGTH_SHORT).show();
                     }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Objet déposé : " + monArme.getTitre(), Toast.LENGTH_SHORT).show();
 
+                        // POUR LE SERVEUR : dire quel objet a été déposé sur la carte.
+
+                        ArmeView vue = null;
+                        for (ArmeView i : listeArmeView)
+                            if (i.getId() == view.getId())
+                                vue = i;
+
+                        listeArmeView.remove(vue);
+                        listeArmes.remove(view.getId());
+                    }
 
                     ArmeAdapter adapter = (ArmeAdapter) grille.getAdapter();
                     adapter.notifyDataSetChanged();
 
                     return true;
                 }
-            });*/
+            });
 
             listeArmeView.add(vue);
         }

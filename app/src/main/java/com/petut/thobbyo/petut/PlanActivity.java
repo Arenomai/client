@@ -68,9 +68,9 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 toggleGps(true);
 
-                // Placement provisoire d'objets qui viendront du serveur
-
                 final ArrayList<ObjetPlan> listeObjets = new ArrayList<>();
+
+                // POUR LE SERVEUR : Donner les objets autour du joueur à la position actuelle
 
                 listeObjets.add(new ObjetPlan(new HacheFer(), 45, 4, false));
                 listeObjets.add(new ObjetPlan(new BouclierBois(), 45, 5, false));
@@ -97,6 +97,8 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                         else {
                             Toast.makeText(getApplicationContext(), "Objet récupéré : "+obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
                             mapboxMap.removeMarker(marker);
+
+                            // POUR LE SERVEUR : Dire au serveur quel objet a été récupéré dans l'inventaire
                         }
                         return true;
                     }
