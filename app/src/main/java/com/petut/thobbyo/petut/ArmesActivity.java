@@ -121,10 +121,10 @@ public class ArmesActivity extends AppCompatActivity {
                 public boolean onLongClick(View view) {
                     Arme monArme = listeArmes.get(view.getId());
 
-                    if(selectionArmes[0] == (int) view.getId() || selectionArmes[1] == (int) view.getId()) {
-                        Toast.makeText(getApplicationContext(), "Dépose interdite, objet en cours d'usage", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    //if(selectionArmes[0] == (int) view.getId() || selectionArmes[1] == (int) view.getId()) {
+                    //    Toast.makeText(getApplicationContext(), "Dépose interdite, objet en cours d'usage", Toast.LENGTH_SHORT).show();
+                    //}
+                    //else {
                         Toast.makeText(getApplicationContext(), "Objet déposé : " + monArme.getTitre(), Toast.LENGTH_SHORT).show();
 
                         // POUR LE SERVEUR : dire quel objet a été déposé sur la carte.
@@ -136,7 +136,7 @@ public class ArmesActivity extends AppCompatActivity {
 
                         listeArmeView.remove(vue);
                         listeArmes.remove(view.getId());
-                    }
+                    //}
 
                     ArmeAdapter adapter = (ArmeAdapter) grille.getAdapter();
                     adapter.notifyDataSetChanged();
