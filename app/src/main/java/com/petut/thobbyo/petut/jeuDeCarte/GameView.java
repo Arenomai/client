@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,9 +30,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private float[] pointsGrille;
     private final Matrix matricePlateau = new Matrix();
     private int largeurPlateau, hauteurPlateau;
+    private int choix = 0;
+
+    // Matrices des cartes pour optenir leur position
+    private Matrix invAdef = new Matrix();
+    private Matrix invAatta = new Matrix();
+    private Matrix invAsort = new Matrix();
+
+    // Liste des carte qui sont sur le plateau
     List<Monstre> monstres = new ArrayList<>();
     List<Defense> defenses = new ArrayList<>();
     List<Sort> sorts = new ArrayList<>();
+
+    // Type de la carte qui est placer
+    private int typeC = 1;
 
     // Création de la surface de dessin
     public GameView(Context context) {
@@ -85,6 +97,32 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         dessinerGrille(canvas);
 
+        Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "");
+        Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "");
+
+        Matrix Adef = new Matrix();
+        Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+        Adef.postTranslate(0.1f, 1.05f);
+        if (!Adef.invert(invAdef)) {
+            throw new RuntimeException("matrice n'est pas inversible");
+        }
+        canvas.save();
+        canvas.concat(Adef);
+        def.dessiner(canvas);
+        canvas.restore();
+
+        Matrix Aatta = new Matrix();
+        Aatta.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+        Aatta.postTranslate(0.5f, 1.05f);
+        if (!Aatta.invert(invAatta)) {
+            throw new RuntimeException("matrice n'est pas inversible");
+        }
+        canvas.save();
+        canvas.concat(Aatta);
+        atta.dessiner(canvas);
+        canvas.restore();
+
+
         ArrayList<Carte> suppr = new ArrayList<>();
         // Dessine les carte et les fait se déplacer.
         synchronized (monstres) {
@@ -95,7 +133,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         (float) a.getPosY() / hauteurPlateau);
                 canvas.save();
                 canvas.concat(matriceMonstre);
-                // android.util.Log.d(TAG, "Dessin monstre (" + a.getPosX() + ", " + a.getPosY() + ")");
                 a.dessiner(canvas);
                 canvas.restore();
 
@@ -105,8 +142,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        for(Defense a : defenses){
-            a.dessiner(canvas);
+        synchronized (defenses) {
+            for(Defense a : defenses){
+                Matrix matricedefenses = new Matrix();
+                matricedefenses.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+                matricedefenses.postTranslate((float) a.getPosX() / largeurPlateau,
+                        (float) a.getPosY() / hauteurPlateau);
+                canvas.save();
+                canvas.concat(matricedefenses);
+                a.dessiner(canvas);
+                canvas.restore();
+
+                /*if (a.getPosY() < 0){
+                    suppr.add(a);
+                }*/
+            }
         }
 
         for(Sort a : sorts){
@@ -153,19 +203,62 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
                 // Déplace tous les monstres
+
                 synchronized (monstres) {
                     for (Monstre a : monstres) {
                         a.moov();
                     }
                 }
+
+////////    pointsC ne contient pas des valeurs comprise entre 0 et 1.
+                float[] pointsC = new float[] { currentX, currentY };
+
+                invAdef.mapPoints(pointsC);
+                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                    typeC = 1;
+                }
+
+                invAatta.mapPoints(pointsC);
+                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                    typeC = 2;
+                }
+
+                invAsort.mapPoints(pointsC);
+                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                    typeC = 3;
+                }
+////////
+                Monstre atta = null;
+                Defense def = null;
+
+                Log.d(" typeC : ", typeC+"");
+
                 if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
-                    // Crée un monstre
-                    Monstre atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
-                            new Image(this.getContext(), R.mipmap.monstre_sourire));
+                    // Crée une carte
+                    if(typeC == 1){
+                        def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ));
+                    }
+
+                    if(typeC == 2){
+                        atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
+                                new Image(this.getContext(), R.mipmap.monstre_sourire));
+                    }
+
+                    if(typeC == 3){
+                        atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
+                                new Image(this.getContext(), R.mipmap.monstre_sourire));
+                    }
 
                     // On ajoute le monstre à la liste
                     synchronized (monstres) {
-                        monstres.add(atta);
+                        if (atta != null){
+                            monstres.add(atta);
+                        }
+                    }
+                    synchronized (defenses){
+                        if(def != null){
+                            defenses.add(def);
+                        }
                     }
                 }
                 break;
@@ -200,7 +293,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ratioPlateau = ((float)largeurPlateau) / hauteurPlateau;
         if (ratioEcran > ratioPlateau) {
             final float largeur = ((float)h) / hauteurPlateau * largeurPlateau;
-            matricePlateau.postScale(largeur, h);
+            matricePlateau.postScale(largeur*0.85f, h*0.85f);
             matricePlateau.postTranslate((w - largeur) / 2, 0);
         } else {
             final float hauteur = ((float)w) / largeurPlateau * hauteurPlateau;
