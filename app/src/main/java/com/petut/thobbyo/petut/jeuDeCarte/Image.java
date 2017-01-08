@@ -86,4 +86,8 @@ public class Image
         canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
 }
