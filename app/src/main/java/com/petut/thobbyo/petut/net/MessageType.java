@@ -5,7 +5,9 @@ public enum MessageType {
     Auth(1),
     Inventory(2),
     Event(3),
-    UserAccount(4);
+    UserAccount(4),
+    // ItemDef(5),
+    PosUpdate(6);
 
     private static final MessageType[] mEnumValues = MessageType.values();
     public static MessageType fromInteger(int x) {
