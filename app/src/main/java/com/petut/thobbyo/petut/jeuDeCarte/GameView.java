@@ -33,9 +33,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int choix = 0;
 
     // Matrices des cartes pour optenir leur position
-    private Matrix invAdef = new Matrix();
-    private Matrix invAatta = new Matrix();
-    private Matrix invAsort = new Matrix();
+    private Matrix SAdef = new Matrix();
+    private Matrix SAatta = new Matrix();
+    private Matrix SAsort = new Matrix();
 
     // Liste des carte qui sont sur le plateau
     List<Monstre> monstres = new ArrayList<>();
@@ -103,20 +103,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Matrix Adef = new Matrix();
         Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
         Adef.postTranslate(0.1f, 1.05f);
-        if (!Adef.invert(invAdef)) {
-            throw new RuntimeException("matrice n'est pas inversible");
-        }
+        SAdef = Adef;
         canvas.save();
         canvas.concat(Adef);
         def.dessiner(canvas);
+
         canvas.restore();
 
         Matrix Aatta = new Matrix();
         Aatta.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
         Aatta.postTranslate(0.5f, 1.05f);
-        if (!Aatta.invert(invAatta)) {
-            throw new RuntimeException("matrice n'est pas inversible");
-        }
         canvas.save();
         canvas.concat(Aatta);
         atta.dessiner(canvas);
@@ -199,6 +195,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         final int x = (int) Math.floor(points[0] * largeurPlateau),
                   y = (int) Math.floor(points[1] * hauteurPlateau);
 
+        Log.d(" x ", ""+points[0]+" ; " + x);
+        Log.d(" y ", ""+points[1]+" ; " + y);
+
         switch (event.getAction()) {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
@@ -210,28 +209,44 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }
 
-////////    pointsC ne contient pas des valeurs comprise entre 0 et 1.
-                float[] pointsC = new float[] { currentX, currentY };
+////////    pointsC ne contient pas des valeurs comprise entre 0 et 1 !!!
+                currentX = (int) event.getX();
+                currentY = (int) event.getY();
 
-                invAdef.mapPoints(pointsC);
-                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                Matrix inv = new Matrix();
+                if (!SAdef.invert(inv)) {
+                    throw new RuntimeException("matrice n'est pas inversible");
+                }
+                points = new float[] { currentX, currentY };
+                inv.mapPoints(points);
+                if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 1;
                 }
 
-                invAatta.mapPoints(pointsC);
-                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                inv = new Matrix();
+                if (!SAatta.invert(inv)) {
+                    throw new RuntimeException("matrice n'est pas inversible");
+                }
+                points = new float[] { currentX, currentY };
+                inv.mapPoints(points);
+                if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 2;
                 }
 
-                invAsort.mapPoints(pointsC);
-                if(pointsC[0] >= 0 && pointsC[0] <= 1 && pointsC[1] >= 0 && pointsC[1] <= 1){
+                inv = new Matrix();
+                if (!SAsort.invert(inv)) {
+                    throw new RuntimeException("matrice n'est pas inversible");
+                }
+                points = new float[] { currentX, currentY };
+                inv.mapPoints(points);
+                if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 3;
                 }
 ////////
                 Monstre atta = null;
                 Defense def = null;
 
-                Log.d(" typeC : ", typeC+"");
+                Log.d(" pointsC : ", points[0]+"");
 
                 if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
                     // Crée une carte
