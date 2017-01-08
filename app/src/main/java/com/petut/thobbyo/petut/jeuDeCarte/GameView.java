@@ -86,6 +86,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // Fonction qui "dessine" un écran de jeu
     public void doDraw(Canvas canvas) {
         if (canvas == null) { return; }
+        CanvasMatrixProxy canMtx = new CanvasMatrixProxy(canvas);
 
         // On efface l'écran
         canvas.drawColor(Color.WHITE);
@@ -93,8 +94,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawBitmap(fondCouleur, 0, 0, null);
 
         // Dessine la grille
-        canvas.save();
-        canvas.concat(matricePlateau);
+        canMtx.save();
+        canMtx.concat(matricePlateau);
 
         dessinerGrille(canvas);
 
@@ -105,19 +106,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
         Adef.postTranslate(0.1f, 1.05f);
         SAdef = Adef;
-        canvas.save();
-        canvas.concat(Adef);
+        canMtx.save();
+        canMtx.concat(Adef);
         def.dessiner(canvas);
-
-        canvas.restore();
+        canMtx.restore();
 
         Matrix Aatta = new Matrix();
         Aatta.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
         Aatta.postTranslate(0.5f, 1.05f);
-        canvas.save();
-        canvas.concat(Aatta);
+        canMtx.save();
+        canMtx.concat(Aatta);
         atta.dessiner(canvas);
-        canvas.restore();
+        canMtx.restore();
 
 
         ArrayList<Carte> suppr = new ArrayList<>();
@@ -128,10 +128,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 matriceMonstre.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
                 matriceMonstre.postTranslate((float) a.getPosX() / largeurPlateau,
                         (float) a.getPosY() / hauteurPlateau);
-                canvas.save();
-                canvas.concat(matriceMonstre);
+                canMtx.save();
+                canMtx.concat(matriceMonstre);
                 a.dessiner(canvas);
-                canvas.restore();
+                canMtx.restore();
 
                 if (a.getPosY() < 0){
                     suppr.add(a);
@@ -145,10 +145,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 matricedefenses.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
                 matricedefenses.postTranslate((float) a.getPosX() / largeurPlateau,
                         (float) a.getPosY() / hauteurPlateau);
-                canvas.save();
-                canvas.concat(matricedefenses);
+                canMtx.save();
+                canMtx.concat(matricedefenses);
                 a.dessiner(canvas);
-                canvas.restore();
+                canMtx.restore();
 
                 /*if (a.getPosY() < 0){
                     suppr.add(a);
@@ -163,7 +163,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(Carte a : suppr){
             monstres.remove(a);
         }
-        canvas.restore();
+        canMtx.restore();
     }
 
     // Fonction obligatoire de l'objet SurfaceView
@@ -309,7 +309,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ratioPlateau = ((float)largeurPlateau) / hauteurPlateau;
         if (ratioEcran > ratioPlateau) {
             final float largeur = ((float)h) / hauteurPlateau * largeurPlateau;
-            matricePlateau.postScale(largeur*0.85f, h*0.85f);
+            matricePlateau.postScale(largeur, h*0.85f);
             matricePlateau.postTranslate((w - largeur) / 2, 0);
         } else {
             final float hauteur = ((float)w) / largeurPlateau * hauteurPlateau;
