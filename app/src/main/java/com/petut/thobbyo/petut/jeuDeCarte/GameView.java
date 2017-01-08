@@ -49,16 +49,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
-        setTaillePlateau(5, 9);
         gameLoopThread = new GameLoopThread(this);
 
         peintureGrille = new Paint();
         peintureGrille.setStyle(Paint.Style.STROKE);
         peintureGrille.setStrokeWidth(0.01f);
         peintureGrille.setColor(Color.WHITE);
+        setTaillePlateau(5, 9, peintureGrille.getStrokeWidth());
     }
 
-    private void setTaillePlateau(int largeur, int hauteur) {
+    private void setTaillePlateau(int largeur, int hauteur, float epaisseur) {
+        epaisseur /= 2;
         largeurPlateau = largeur;
         hauteurPlateau = hauteur;
 
@@ -66,15 +67,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         final float fx = 1.f / largeurPlateau;
         for (int x = 0; x < largeurPlateau + 1; ++x) {
             pointsGrille[x*4] = pointsGrille[x*4 + 2] = x * fx;
-            pointsGrille[x*4 + 1] = 0;
-            pointsGrille[x*4 + 3] = 1;
+            pointsGrille[x*4 + 1] = 0 - epaisseur;
+            pointsGrille[x*4 + 3] = 1 + epaisseur;
         }
         final int off = (largeurPlateau + 1) * 4;
         final float fy = 1.f / hauteurPlateau;
         for (int y = 0; y < hauteurPlateau + 1; ++y) {
             pointsGrille[off + y*4 + 1] = pointsGrille[off + y*4 + 3] = y * fy;
-            pointsGrille[off + y*4] = 0;
-            pointsGrille[off + y*4 + 2] = 1;
+            pointsGrille[off + y*4] = 0 - epaisseur;
+            pointsGrille[off + y*4 + 2] = 1 + epaisseur;
         }
     }
 
