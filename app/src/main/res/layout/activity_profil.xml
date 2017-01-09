@@ -35,7 +35,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView9">
+        android:layout_below="@+id/textView9"
+        android:baselineAligned="false">
 
         <Space
             android:layout_width="match_parent"
@@ -43,30 +44,35 @@
             android:layout_margin="10dp" />
 
         <TextView
-            android:text="ID : 54f6d7a8s2"
-            android:layout_width="match_parent"
+            android:text="ID : "
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView13"
             android:textSize="18sp" />
 
+        <TextView
+            android:layout_width="184dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewID"
+            android:textAlignment="viewStart" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
 
         <TextView
-            android:text="Pseudonyme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView11" />
+            android:id="@+id/textView11"
+            android:text="Pseudonyme" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Inspecteur Gadget"
             android:ems="10"
-            android:id="@+id/editText10" />
+            android:id="@+id/editTextPseudo" />
 
         <Space
             android:layout_width="match_parent"
@@ -83,9 +89,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Hé là qui va là ?"
             android:ems="10"
-            android:id="@+id/editText11" />
+            android:id="@+id/editTextBio" />
+
+        <Button
+            android:text="Mettre à jour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonProfil" />
     </LinearLayout>
 
 </RelativeLayout>
