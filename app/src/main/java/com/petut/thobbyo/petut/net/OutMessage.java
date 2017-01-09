@@ -20,6 +20,7 @@ public class OutMessage extends Message {
 
     public void writeString(final String str) {
         try {
+            dos.writeShort(str.length());
             dos.write(Utf8.encode(str).array());
         } catch (IOException e) {
             e.printStackTrace();
@@ -28,6 +29,7 @@ public class OutMessage extends Message {
 
     public void writeString32(final String str) {
         try {
+            dos.writeShort(str.length());
             dos.write(Utf32LE.encode(str).array());
         } catch (IOException e) {
             e.printStackTrace();
