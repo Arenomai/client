@@ -7,17 +7,15 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-public class CheckGPS extends Activity {
+public class CheckGPSActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan);
+        setContentView(R.layout.activity_login);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-
-        }else{
-            showGPSDisabledAlertToUser();
-        }
+            Intent intent = new Intent(this, LoginActivity.class);
+        }else showGPSDisabledAlertToUser();
     }
 
     private void showGPSDisabledAlertToUser(){
