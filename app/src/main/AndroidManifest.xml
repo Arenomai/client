@@ -30,7 +30,7 @@
         </activity>
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
-
+        <activity android:name=".CheckGPSActivity"/>
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfilActivity" />
         <activity android:name=".ArmesActivity" />
