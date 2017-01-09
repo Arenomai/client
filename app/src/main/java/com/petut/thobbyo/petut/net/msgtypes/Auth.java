@@ -11,14 +11,14 @@ public abstract class Auth {
 
     public static abstract class Subtype {
         public static final byte
-                Request = 0,
-                ResponseSuccess = 1,
-                ResponsFailure = 2;
+                Denied = 0,
+                Request = 1,
+                Response = 2;
     }
 
     public static class Request implements Serializable {
-        public String username;
-        public byte passwordSha512[];
+        private String username;
+        private byte passwordSha512[];
 
         public void setPassword(final String pw) {
             MessageDigest md;
@@ -31,6 +31,10 @@ public abstract class Auth {
             }
         }
 
+        public void setUsername(final String un)
+        {
+            this.username = un;
+        }
         @Override
         public void writeToMsg(OutMessage msg) {
             msg.writeString(username);

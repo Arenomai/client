@@ -41,6 +41,11 @@ public class TCPActivity extends AppCompatActivity {
                 omsg.writeI32(123456);
                 co.write(omsg);
 
+                publishProgress("Sending inventory request");
+                omsg = new OutMessage(MessageType.Inventory);
+                omsg.writeI32(123);
+                co.write(omsg);
+
                 publishProgress("Disconnecting...");
                 co.close();
                 publishProgress("Disconnected");
