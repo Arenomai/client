@@ -182,8 +182,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Position du doigt sur l'écrant
-        int currentX = (int) event.getX();
-        int currentY = (int) event.getY();
+        final int currentX = (int) event.getX();
+        final int currentY = (int) event.getY();
 
         // Position que prendra la carte
         final Matrix invMatricePlateau = new Matrix();
@@ -210,16 +210,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }
 
-////////    pointsC ne contient pas des valeurs comprise entre 0 et 1 !!!
-                currentX = (int) event.getX();
-                currentY = (int) event.getY();
+////////    pointsC ne contient pas des valeurs comprise entre 0 et 1 !!!=
 
+                Matrix plateauSAdef = new Matrix(SAdef);
+                plateauSAdef.postConcat(matricePlateau);
                 Matrix inv = new Matrix();
-                if (!SAdef.invert(inv)) {
+                if (!plateauSAdef.invert(inv)) {
                     throw new RuntimeException("matrice n'est pas inversible");
                 }
                 points = new float[] { currentX, currentY };
                 inv.mapPoints(points);
+                Log.d(" 0 pointsC : ", points[0] + " " + points[1]);
                 if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 1;
                 }
@@ -304,17 +305,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // nous obtenons ici la largeur/hauteur de l'écran en pixels
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
-        matricePlateau.reset();
-        final float ratioEcran = ((float)w) / h,
+        float ph = h * 0.85f;
+        final float ratioEcran = w / ph,
                 ratioPlateau = ((float)largeurPlateau) / hauteurPlateau;
         if (ratioEcran > ratioPlateau) {
-            final float largeur = ((float)h) / hauteurPlateau * largeurPlateau;
-            matricePlateau.postScale(largeur, h*0.85f);
+            final float largeur = ph / hauteurPlateau * largeurPlateau;
+            matricePlateau.setScale(largeur, ph);
             matricePlateau.postTranslate((w - largeur) / 2, 0);
         } else {
             final float hauteur = ((float)w) / largeurPlateau * hauteurPlateau;
-            matricePlateau.postScale(w, hauteur);
-            matricePlateau.postTranslate(0, (h - hauteur) / 2);
+            matricePlateau.setScale(w, hauteur);
+            matricePlateau.postTranslate(0, (ph - hauteur) / 2);
         }
 
         int[] pixels = new int[w * h];
