@@ -114,6 +114,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Matrix Aatta = new Matrix();
         Aatta.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
         Aatta.postTranslate(0.5f, 1.05f);
+        SAatta = Aatta;
         canMtx.save();
         canMtx.concat(Aatta);
         atta.dessiner(canvas);
@@ -210,8 +211,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }
 
-////////    pointsC ne contient pas des valeurs comprise entre 0 et 1 !!!=
-
+                //On test le choix de la carte du joueurs
                 Matrix plateauSAdef = new Matrix(SAdef);
                 plateauSAdef.postConcat(matricePlateau);
                 Matrix inv = new Matrix();
@@ -220,13 +220,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 points = new float[] { currentX, currentY };
                 inv.mapPoints(points);
-                Log.d(" 0 pointsC : ", points[0] + " " + points[1]);
                 if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 1;
                 }
 
+
+                Matrix plateauSAatta = new Matrix(SAatta);
+                plateauSAatta.postConcat(matricePlateau);
                 inv = new Matrix();
-                if (!SAatta.invert(inv)) {
+                if (!plateauSAatta.invert(inv)) {
                     throw new RuntimeException("matrice n'est pas inversible");
                 }
                 points = new float[] { currentX, currentY };
@@ -235,36 +237,37 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     typeC = 2;
                 }
 
-                inv = new Matrix();
-                if (!SAsort.invert(inv)) {
-                    throw new RuntimeException("matrice n'est pas inversible");
-                }
-                points = new float[] { currentX, currentY };
-                inv.mapPoints(points);
-                if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
+
+                /*if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
                     typeC = 3;
-                }
-////////
+                }*/
+
+                //fin du test
+
+
                 Monstre atta = null;
                 Defense def = null;
 
-                Log.d(" pointsC : ", points[0]+"");
-
+                //
                 if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
                     // Crée une carte
-                    if(typeC == 1){
-                        def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ));
+                    if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
+                        if (typeC == 1) {
+                            def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128));
+                        }
                     }
 
-                    if(typeC == 2){
-                        atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
-                                new Image(this.getContext(), R.mipmap.monstre_sourire));
+                    if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*7/9 && y < hauteurPlateau) {
+                        if (typeC == 2) {
+                            atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                        }
                     }
 
-                    if(typeC == 3){
-                        atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô",
-                                new Image(this.getContext(), R.mipmap.monstre_sourire));
-                    }
+                    /*if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
+                        if (typeC == 3) {
+                            atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                        }
+                    }*/
 
                     // On ajoute le monstre à la liste
                     synchronized (monstres) {
