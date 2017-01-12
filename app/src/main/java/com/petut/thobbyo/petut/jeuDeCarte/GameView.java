@@ -201,20 +201,34 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         switch (event.getAction()) {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
-                // Déplace tous les monstres
+
+                // Déplace tous les monstres sauf si il y a quelque chose dans leur trajectoire
 
                 synchronized (monstres) {
-                    for (Monstre m : monstres) {
+
+                    for (Monstre m1 : monstres) {
                         boolean avancer = true;
-                        for(Defense d : defenses){
-                            if(d.getPosY() == m.posAfterMoov() && d.getPosX() == m.getPosX()){
+                        for (Monstre m2 : monstres) {
+                            if (m2.getPosY() == m1.posAfterMoov() && m2.getPosX() == m1.getPosX() && m2 != m1) {
                                 avancer = false;
                             }
                         }
+
+                        synchronized (defenses) {
+
+                            for (Defense d : defenses) {
+                                if (d.getPosY() == m1.posAfterMoov() && d.getPosX() == m1.getPosX()) {
+                                    avancer = false;
+                                }
+                            }
+
+                        }
+
                         if(avancer){
-                            m.moov();
+                            m1.moov();
                         }
                     }
+
                 }
 
                 //On test le choix de la carte du joueurs
@@ -254,8 +268,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Monstre atta = null;
                 Defense def = null;
 
+                //On verifie qu'il n'y a pas déjà une carte a cette endroi
+                boolean pasOcuper = true;
+                synchronized (monstres) {
+
+                    for (Monstre m : monstres) {
+                        if (m.getPosY() == y && m.getPosX() == x) {
+                            pasOcuper = false;
+                        }
+                    }
+                }
+
+                synchronized (defenses) {
+                    for (Defense d : defenses) {
+                        if (d.getPosY() == y && d.getPosX() == x) {
+                            pasOcuper = false;
+                        }
+                    }
+                }
+
+
                 //
-                if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
+                if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau && pasOcuper) {
                     // Crée une carte
                     if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
                         if (typeC == 1) {
@@ -281,6 +315,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             monstres.add(atta);
                         }
                     }
+                    // On ajoute la defence à la liste
                     synchronized (defenses){
                         if(def != null){
                             defenses.add(def);
