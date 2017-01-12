@@ -1,6 +1,7 @@
 package com.petut.thobbyo.petut;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 
 import static com.petut.thobbyo.petut.R.id.markerViewContainer;
 import static com.petut.thobbyo.petut.R.id.view;
+import static java.security.AccessController.getContext;
 
 public class PlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -91,8 +93,10 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         ObjetPlan obj = listeObjets.get((int) marker.getId());
                         if(obj.getSeMerite() == true) {
-                            GameView game = new GameView(PlanActivity.this);
-                            setContentView(game);
+
+                            Intent intent = new Intent(PlanActivity.this, GameActivity.class);
+                            PlanActivity.this.startActivity(intent);
+
                         }
                         else {
                             Toast.makeText(getApplicationContext(), "Objet récupéré : "+obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();

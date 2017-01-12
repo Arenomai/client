@@ -37,6 +37,7 @@
         <activity android:name=".CartesActivity" />
         <activity android:name=".TCPActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GameActivity"/>
     </application>
 
 </manifest>
