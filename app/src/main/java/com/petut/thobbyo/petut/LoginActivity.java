@@ -16,6 +16,8 @@ import com.petut.thobbyo.petut.net.msgtypes.AuthTockenRequester;
 
 import java.io.IOException;
 
+import static android.R.attr.duration;
+
 public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sp;
     Button bouton_login;
@@ -57,10 +59,18 @@ public class LoginActivity extends AppCompatActivity {
                     spe.putInt("serverPort", Integer.valueOf(txt_server_port.getText().toString()));
                     spe.apply();
                     new AuthTockenRequester(getApplicationContext()).execute(txt_username.getText().toString(), txt_password.getText().toString());
-
-                    Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
+                    int token = sp.getInt("token",-3);
+                    if(token == -2)
+                    {
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
+                        toast.show();
+                    }
+                    else {
+                        Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                    }
                 }
             }
         });

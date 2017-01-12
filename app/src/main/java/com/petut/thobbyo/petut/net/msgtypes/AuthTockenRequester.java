@@ -40,8 +40,14 @@ public class AuthTockenRequester extends AsyncTask<String, String, String> {
             omsg.writeString(params[1]);
             co.write(omsg);
             InMessage inmsg = co.read();
+            if(inmsg.getSubtype() == Auth.Subtype.Denied)
+            {
+                spe.putInt("token",-2);
+            }
+            else{
             int token = inmsg.readI32();
             spe.putInt("token",token);
+            }
             spe.apply();
             co.close();
         } catch (IOException e) {

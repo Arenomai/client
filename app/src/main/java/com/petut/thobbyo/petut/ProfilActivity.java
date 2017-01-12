@@ -16,6 +16,7 @@ import com.petut.thobbyo.petut.net.MessageType;
 import com.petut.thobbyo.petut.net.OutMessage;
 import com.petut.thobbyo.petut.net.msgtypes.UserAccount;
 import com.petut.thobbyo.petut.net.msgtypes.UserAccountInfoRequester;
+import com.petut.thobbyo.petut.net.msgtypes.UserAccountInfoUpdater;
 
 import java.io.IOException;
 
@@ -33,7 +34,7 @@ public class ProfilActivity extends AppCompatActivity {
         editTextBio = (EditText) findViewById(R.id.editTextBio);
         final SharedPreferences sp = getSharedPreferences(Application.PREF_DEFAULT, 0);
         final SharedPreferences.Editor spe = sp.edit();
-        //new UserAccountInfoRequester(getApplicationContext()).execute();
+        new UserAccountInfoRequester(getApplicationContext()).execute();
         textID.setText(String.valueOf(sp.getInt("token",-1)));
         editTextPseudo.setText(sp.getString("nick",""));
         editTextBio.setText(sp.getString("bio",""));
@@ -42,7 +43,9 @@ public class ProfilActivity extends AppCompatActivity {
         button_profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String nick = editTextPseudo.getText().toString();
+                String bio = editTextBio.getText().toString();
+                new UserAccountInfoUpdater(getApplicationContext()).execute(nick,bio);
             }
 
 
