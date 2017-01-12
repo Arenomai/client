@@ -3,6 +3,7 @@ package com.petut.thobbyo.petut.net;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class OutMessage extends Message {
     ByteArrayOutputStream baos;
@@ -20,8 +21,10 @@ public class OutMessage extends Message {
 
     public void writeString(final String str) {
         try {
-            dos.writeShort(str.length());
-            dos.write(Utf8.encode(str).array());
+            final ByteBuffer bbuf = Utf8.encode(str);
+            bbuf.position(0);
+            dos.writeShort(bbuf.remaining());
+            dos.write(bbuf.array(), 0, bbuf.remaining());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,8 +32,10 @@ public class OutMessage extends Message {
 
     public void writeString32(final String str) {
         try {
-            dos.writeShort(str.length());
-            dos.write(Utf32LE.encode(str).array());
+            final ByteBuffer bbuf = Utf32LE.encode(str);
+            bbuf.position(0);
+            dos.writeShort(bbuf.remaining());
+            dos.write(bbuf.array(), 0, bbuf.remaining());
         } catch (IOException e) {
             e.printStackTrace();
         }
