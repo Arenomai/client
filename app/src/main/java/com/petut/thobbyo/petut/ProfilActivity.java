@@ -15,16 +15,11 @@ import com.petut.thobbyo.petut.net.InMessage;
 import com.petut.thobbyo.petut.net.MessageType;
 import com.petut.thobbyo.petut.net.OutMessage;
 import com.petut.thobbyo.petut.net.msgtypes.UserAccount;
+import com.petut.thobbyo.petut.net.msgtypes.UserAccountInfoRequester;
 
 import java.io.IOException;
 
 public class ProfilActivity extends AppCompatActivity {
-    public ProfilActivity(Context ctx) {
-        context = ctx;
-    }
-
-    private final Connection co = new Connection();
-    private final Context context;
 
     private Button button_profil;
     private TextView textID;
@@ -38,20 +33,10 @@ public class ProfilActivity extends AppCompatActivity {
         editTextBio = (EditText) findViewById(R.id.editTextBio);
         final SharedPreferences sp = getSharedPreferences(Application.PREF_DEFAULT, 0);
         final SharedPreferences.Editor spe = sp.edit();
-        textID.setText(sp.getInt("token",-1));
-        try {
-            co.connect(sp.getString("serverAddr","thgros.fr"),sp.getInt("serverPort",4242));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        OutMessage omsg = new OutMessage(MessageType.UserAccount, UserAccount.Subtype.InfoRequest);
-        omsg.writeI32(sp.getInt("token",-1));
-        co.write(omsg);
-        InMessage inmsg = co.read();
-        String nick = inmsg.readString();
-        String bio = inmsg.readString();
-        editTextPseudo.setText(nick);
-        editTextBio.setText(bio);
+        //new UserAccountInfoRequester(getApplicationContext()).execute();
+        textID.setText(String.valueOf(sp.getInt("token",-1)));
+        editTextPseudo.setText(sp.getString("nick",""));
+        editTextBio.setText(sp.getString("bio",""));
 
         button_profil = (Button) findViewById(R.id.buttonProfil);
         button_profil.setOnClickListener(new View.OnClickListener() {

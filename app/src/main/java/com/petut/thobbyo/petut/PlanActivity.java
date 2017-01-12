@@ -51,7 +51,7 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MapboxAccountManager.start(this, "pk.eyJ1IjoiZWxlbWVudHciLCJhIjoiY2l1aTRwcGZjMDAyazJ2cWx5" +
+        MapboxAccountManager.start(getApplicationContext(), "pk.eyJ1IjoiZWxlbWVudHciLCJhIjoiY2l1aTRwcGZjMDAyazJ2cWx5" +
                 "amxqM25ueiJ9.EBJG9EXzpFBf6gSBbyvWZw");
 
         setContentView(R.layout.activity_plan);

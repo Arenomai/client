@@ -36,14 +36,13 @@ public class AuthTockenRequester extends AsyncTask<String, String, String> {
         try {
             co.connect(sp.getString("serverAddr","thgros.fr"),sp.getInt("serverPort",4242));
             OutMessage omsg = new OutMessage(MessageType.Auth, Auth.Subtype.Request);
-            Auth.Request ar = new Auth.Request();
-            ar.setUsername(params[0]);
-            ar.setPassword(params[1]);
-            ar.writeToMsg(omsg);
+            omsg.writeString(params[0]);
+            omsg.writeString(params[1]);
             co.write(omsg);
-
             InMessage inmsg = co.read();
-            spe.putInt("token",inmsg.readI32());
+            int token = inmsg.readI32();
+            spe.putInt("token",token);
+            spe.apply();
             co.close();
         } catch (IOException e) {
             e.printStackTrace();
