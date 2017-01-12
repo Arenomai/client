@@ -197,8 +197,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         final int x = (int) Math.floor(points[0] * largeurPlateau),
                   y = (int) Math.floor(points[1] * hauteurPlateau);
 
-        Log.d(" x ", ""+points[0]+" ; " + x);
-        Log.d(" y ", ""+points[1]+" ; " + y);
 
         switch (event.getAction()) {
             // code exécuté lorsque le doigt touche l'écran.
@@ -206,8 +204,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 // Déplace tous les monstres
 
                 synchronized (monstres) {
-                    for (Monstre a : monstres) {
-                        a.moov();
+                    for (Monstre m : monstres) {
+                        boolean avancer = true;
+                        for(Defense d : defenses){
+                            if(d.getPosY() == m.posAfterMoov() && d.getPosX() == m.getPosX()){
+                                avancer = false;
+                            }
+                        }
+                        if(avancer){
+                            m.moov();
+                        }
                     }
                 }
 

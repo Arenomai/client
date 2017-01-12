@@ -51,6 +51,10 @@ public class Monstre extends Carte {
         posY -= tailleH;
     }
 
+    public int posAfterMoov(){
+        return posY - tailleH;
+    }
+
     private int vitesse;
     private int def;
     private int damage;
