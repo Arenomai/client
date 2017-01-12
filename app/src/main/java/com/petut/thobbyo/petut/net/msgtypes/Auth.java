@@ -18,17 +18,19 @@ public abstract class Auth {
 
     public static class Request implements Serializable {
         private String username;
+        private String password;
         private byte passwordSha512[];
 
         public void setPassword(final String pw) {
-            MessageDigest md;
+            /*MessageDigest md;
             try {
                 md = MessageDigest.getInstance("SHA-512");
                 md.update(pw.getBytes());
                 passwordSha512 = md.digest();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-            }
+            }*/
+            this.password = pw;
         }
 
         public void setUsername(final String un)
@@ -38,7 +40,8 @@ public abstract class Auth {
         @Override
         public void writeToMsg(OutMessage msg) {
             msg.writeString(username);
-            msg.writeData(passwordSha512);
+            msg.writeString(password);
+            //msg.writeData(passwordSha512);
         }
 
         @Override
