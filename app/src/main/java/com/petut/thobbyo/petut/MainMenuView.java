@@ -63,19 +63,19 @@ public class MainMenuView extends LinearLayout {
         inflate(getContext(), R.layout.sample_linear_menu_view, this);
 
         final ButtonData[] boutons = new ButtonData[] {
-                new ButtonData(R.id.tcp, TCPActivity.class),
                 new ButtonData(R.id.plan, PlanActivity.class),
                 new ButtonData(R.id.profil, ProfilActivity.class),
                 new ButtonData(R.id.defense, ArmesActivity.class),
-                new ButtonData(R.id.cartes, CartesActivity.class)
+                new ButtonData(R.id.cartes, CartesActivity.class),
+                new ButtonData(R.id.tcp, AboutActivity.class),
         };
 
         ArrayList<Integer> resBoutonsSelection = new ArrayList<>();
-        resBoutonsSelection.add(R.drawable.menu_tcp_sel);
         resBoutonsSelection.add(R.drawable.menu_plan_sel);
         resBoutonsSelection.add(R.drawable.menu_moi_sel);
         resBoutonsSelection.add(R.drawable.menu_armes_sel);
         resBoutonsSelection.add(R.drawable.menu_cartes_sel);
+        resBoutonsSelection.add(R.drawable.menu_about_sel);
 
         final Activity hostActivity = getActivity();
         Class<? extends Activity> hostActivityClass = null;
