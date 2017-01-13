@@ -21,7 +21,9 @@
         <activity
             android:name=".PlanActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,9 +37,11 @@
         <activity android:name=".ProfilActivity" />
         <activity android:name=".ArmesActivity" />
         <activity android:name=".CartesActivity" />
-        <activity android:name=".TCPActivity"
+        <activity
+            android:name=".TCPActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GameActivity"/>
+        <activity android:name=".GameActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

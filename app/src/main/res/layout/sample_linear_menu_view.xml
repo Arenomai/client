@@ -9,19 +9,6 @@
     android:padding="10dp">
 
     <ImageButton
-        android:id="@+id/tcp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="0.5"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:onClick="clickOne"
-        android:background="@null"
-        android:src="@drawable/menu_tcp"
-        android:layout_margin="10dp" />
-
-    <ImageButton
         android:id="@+id/plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,4 +59,18 @@
         android:background="@null"
         android:src="@drawable/menu_cartes"
         android:layout_margin="10dp" />
+
+    <ImageButton
+        android:id="@+id/tcp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:onClick="clickOne"
+        android:background="@null"
+        android:src="@drawable/menu_about"
+        android:layout_margin="10dp" />
+
 </LinearLayout>
