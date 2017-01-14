@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import com.petut.thobbyo.petut.R;
 public class Carte {
+
     protected int tailleW;
     protected int tailleH;
     protected int posX;
@@ -23,7 +24,9 @@ public class Carte {
     private int bw, cw;
     private final Paint bordsPaint;
     private final BitmapShader bordBS, coinBS;
-    public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom){
+    private int appartenance;
+
+    public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom, int appartenance){
         this.tailleH = tailleH;
         this.tailleW = tailleW;
         this.posX = posX;
@@ -31,6 +34,7 @@ public class Carte {
         this.img = img;
         this.img.load();
         final Context c = img.getContext();
+        this.appartenance = appartenance;
         Drawable dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_bord);
         bmpBord = ((BitmapDrawable) dr).getBitmap();
         dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_coin);
@@ -45,6 +49,7 @@ public class Carte {
         bordBS = new BitmapShader(bmpBord, Shader.TileMode.CLAMP, Shader.TileMode.REPEAT);
         coinBS = new BitmapShader(bmpCoin, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
     }
+
     public void setTaille(int Ntaille){
         img.setTailleImage(Ntaille, Ntaille);
     }
@@ -55,10 +60,13 @@ public class Carte {
         this.posX = posX;
         this.posY = posY;
     }
+
     public void setImg(Image img){this.img = img ;}
+
     public final void setBorder(float b) {
         border = b;
     }
+
     private void dessinerCadre(Canvas canvas) {
         final Matrix m = new Matrix();
             /* Bords */
@@ -115,15 +123,23 @@ public class Carte {
             canvas.drawRect(new RectF(1-sx, 1-sy, 1, 1), bordsPaint);
         }
     }
+
     public void dessiner(Canvas canvas) {
         canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
         dessinerCadre(canvas);
     }
+
     public Image getImg(){return img ;}
     public int getPosX(){
         return posX;
     }
+
     public  int getPosY(){
         return posY;
     }
+
+    public int getAppartenance(){
+        return appartenance;
+    }
+
 }

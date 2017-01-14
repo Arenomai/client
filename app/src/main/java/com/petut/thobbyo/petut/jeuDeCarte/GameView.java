@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.petut.thobbyo.petut.GameActivity;
 import com.petut.thobbyo.petut.R;
 
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     List<Monstre> monstres = new ArrayList<>();
     List<Defense> defenses = new ArrayList<>();
     List<Sort> sorts = new ArrayList<>();
+
+    //les 2 dieux qui place leur larbin sur le terrun
+    Joueurs ami = new Joueurs(6, 1, 1);
+    Joueurs ennemi = new Joueurs(6, 1, 0);
 
     // Type de la carte qui est placer
     private int typeC = 1;
@@ -99,8 +104,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         dessinerGrille(canvas);
 
-        Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "");
-        Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "");
+        //Carte pour la selection de la carte
+        Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "", -1);
+        Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "", -1);
 
         Matrix Adef = new Matrix();
         Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
@@ -120,7 +126,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         atta.dessiner(canvas);
         canMtx.restore();
 
-
         ArrayList<Carte> suppr = new ArrayList<>();
         // Dessine les carte et les fait se déplacer.
         synchronized (monstres) {
@@ -134,7 +139,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 a.dessiner(canvas);
                 canMtx.restore();
 
-                if (a.getPosY() < 0){
+                if (a.getDef() <= 0){
                     suppr.add(a);
                 }
             }
@@ -151,9 +156,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 a.dessiner(canvas);
                 canMtx.restore();
 
-                /*if (a.getPosY() < 0){
+                if (a.getDef() <= 0){
                     suppr.add(a);
-                }*/
+                }
             }
         }
 
@@ -162,8 +167,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         for(Carte a : suppr){
-            monstres.remove(a);
+
+            if(a instanceof Monstre ){
+                monstres.remove(a);
+            }
+
+            if(a instanceof Defense){
+                defenses.remove(a);
+            }
         }
+
         canMtx.restore();
     }
 
@@ -202,7 +215,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
 
-                // Déplace tous les monstres sauf si il y a quelque chose dans leur trajectoire
+                // Déplace tous les monstres sauf si il y a quelque chose a leur emplacements d'arriver
 
                 synchronized (monstres) {
 
@@ -211,6 +224,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         for (Monstre m2 : monstres) {
                             if (m2.getPosY() == m1.posAfterMoov() && m2.getPosX() == m1.getPosX() && m2 != m1) {
                                 avancer = false;
+
+                                if(m1.getAppartenance() != m2.getAppartenance()){
+                                    m1.pertDef(m2.getDamage());
+                                }
                             }
                         }
 
@@ -219,9 +236,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             for (Defense d : defenses) {
                                 if (d.getPosY() == m1.posAfterMoov() && d.getPosX() == m1.getPosX()) {
                                     avancer = false;
+
+                                    if(m1.getAppartenance() != d.getAppartenance()){
+                                        m1.pertDef(d.getDamage());
+                                        d.pertDef(m1.getDamage());
+                                    }
                                 }
                             }
 
+                        }
+
+                        if(m1.posAfterMoov() < 0){
+                            Log.d(" ennemie ", m1.posAfterMoov()+"");
+                            avancer = false;
+                            ennemi.pertePv(m1.getDamage());
+                            m1.pertDef(ennemi.getDamage());
+                        }
+
+                        if(m1.posAfterMoov() > 9){
+                            Log.d(" ami ", m1.posAfterMoov()+"");
+                            avancer = false;
+                            ami.pertePv(m1.getDamage());
+                            m1.pertDef(ami.getDamage());
                         }
 
                         if(avancer){
@@ -288,18 +324,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
 
-                //
+                //on place la carte a l'endroit ou le joueures a appuiller
                 if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau && pasOcuper) {
                     // Crée une carte
                     if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
                         if (typeC == 1) {
-                            def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128));
+                            def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
                         }
                     }
 
                     if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*7/9 && y < hauteurPlateau) {
                         if (typeC == 2) {
-                            atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                            atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
                         }
                     }
 
@@ -315,6 +351,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             monstres.add(atta);
                         }
                     }
+
                     // On ajoute la defence à la liste
                     synchronized (defenses){
                         if(def != null){
@@ -374,4 +411,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         fondCouleur = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
         fondCouleur.setPixels(pixels, 0, w, 0, 0, w, h);
     }
+
+    public void stop(){
+        if(ami.getPv() < 0 || ennemi.getPv() < 0){
+            final GameActivity context = (GameActivity) this.getContext();
+            context.finish();
+        }
+    }
+
 } // class GameView

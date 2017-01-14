@@ -8,8 +8,8 @@ public class Sort extends Carte {
 
     private int damage;
 
-    public Sort(int tailleH, int tailleW, int posX, int posY, int damage, String nom, Image img){
-        super(tailleH, tailleW, posX, posY, img, nom);
+    public Sort(int tailleH, int tailleW, int posX, int posY, int damage, String nom, Image img, int appartenance){
+        super(tailleH, tailleW, posX, posY, img, nom, appartenance);
         this.damage = damage;
     }
 

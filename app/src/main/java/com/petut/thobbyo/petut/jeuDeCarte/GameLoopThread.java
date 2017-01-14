@@ -7,6 +7,8 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.petut.thobbyo.petut.GameActivity;
+
 public class GameLoopThread extends Thread
 {
     // on définit arbitrairement le nombre d'images par secondes à 30
@@ -67,6 +69,8 @@ public class GameLoopThread extends Thread
                 if (sleepTime >= 0) {sleep(sleepTime);}
             }
             catch (Exception e) {}
+
+            view.stop();
         } // boucle while (running)
     } // public void run()
 
