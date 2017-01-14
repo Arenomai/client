@@ -6,8 +6,8 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 
 public class Defense extends Carte {
 
-    public Defense(int tailleH, int tailleW,  int posX, int posY, int def, int damage, String nom, Image img) {
-        super(tailleH, tailleW, posX, posY, img, nom);
+    public Defense(int tailleH, int tailleW,  int posX, int posY, int def, int damage, String nom, Image img, int appartenance) {
+        super(tailleH, tailleW, posX, posY, img, nom, appartenance);
         this.def = def;
         this.damage = damage;
         this.nom = nom;
@@ -43,6 +43,10 @@ public class Defense extends Carte {
 
     public String getNom() {
         return nom;
+    }
+
+    public void pertDef(int v){
+        def -= v;
     }
 
     private int vitesse;

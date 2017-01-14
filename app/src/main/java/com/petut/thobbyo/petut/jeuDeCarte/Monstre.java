@@ -7,8 +7,8 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 public class Monstre extends Carte {
 
 
-    public Monstre(int tailleH, int tailleW, int posX, int posY, int vitesse, int def, int damage, String nom, Image img) {
-        super(tailleH, tailleW, posX, posY, img, nom);
+    public Monstre(int tailleH, int tailleW, int posX, int posY, int vitesse, int def, int damage, String nom, Image img, int appartenance) {
+        super(tailleH, tailleW, posX, posY, img, nom, appartenance);
         this.def = def;
         this.damage = damage;
         this.nom = nom;
@@ -48,11 +48,20 @@ public class Monstre extends Carte {
     }
 
     public void moov(){
-        posY -= tailleH;
+        if(getAppartenance() == 0){
+            posY += tailleH;
+        }
+        if(getAppartenance() == 1){
+            posY -= tailleH;
+        }
     }
 
     public int posAfterMoov(){
         return posY - tailleH;
+    }
+
+    public void pertDef(int v){
+        def -= v;
     }
 
     private int vitesse;
