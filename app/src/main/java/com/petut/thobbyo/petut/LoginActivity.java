@@ -23,6 +23,28 @@ public class LoginActivity extends AppCompatActivity {
     Button bouton_login;
     EditText txt_server_addr, txt_server_port, txt_username,txt_password;
 
+    private class Connector extends AsyncTask<Object, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            String host = (String) params[0];
+            int port = (int) params[1];
+            try {
+                Application.getServerConnection()
+                        .connect(host, port);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            throw new RuntimeException();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,43 +65,54 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if(txt_username.getText().toString().equals("") || txt_password.getText().toString().equals(""))
-                {
+                if (txt_username.getText().toString().equals("") ||
+                    txt_password.getText().toString().equals("")) {
                     Context context = getApplicationContext();
                     CharSequence text = "Veuillez entrer un pseudo et un mot de passe";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else {
-                    final SharedPreferences sp = getSharedPreferences(Application.PREF_DEFAULT, 0);
+                } else {
                     final SharedPreferences.Editor spe = sp.edit();
                     spe.putString("serverAddr", txt_server_addr.getText().toString());
                     spe.putInt("serverPort", Integer.valueOf(txt_server_port.getText().toString()));
                     spe.apply();
-                    AuthTockenRequester areq = new AuthTockenRequester(getApplicationContext()){
 
-                    @Override
-                    public void onPostExecute(String ret) {
-                        int token = sp.getInt("token",-3);
-                        if(token == -2)
-                        {
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
-                            toast.show();
+                    new Connector() {
+                        @Override
+                        protected void onPostExecute(Boolean result) {
+                            if (result) {
+                                onConnected();
+                            } else {
+                                // TODO ERROR
+                            }
                         }
-                        else {
-                            Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                            startActivity(intent);
-                        }
-                        }
-                    };
-
-                    areq.execute(txt_username.getText().toString(), txt_password.getText().toString());
+                    }.execute(txt_server_addr.getText().toString(), Integer.valueOf(txt_server_port.getText().toString()));
                 }
             }
         });
+    }
+
+    private void onConnected() {
+        AuthTockenRequester atr = new AuthTockenRequester(Application.getServerConnection()) {
+            @Override
+            public void onPostExecute(Integer token) {
+                if (token != null || token == -2) {
+                    final SharedPreferences.Editor spe = sp.edit();
+                    spe.putInt("token", token);
+                    spe.apply();
+
+                    Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                } else {
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
+                    toast.show();
+                }
+            }
+        };
+        atr.execute(txt_username.getText().toString(), txt_password.getText().toString());
     }
 }
