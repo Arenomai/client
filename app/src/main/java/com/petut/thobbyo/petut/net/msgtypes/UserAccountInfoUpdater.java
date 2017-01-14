@@ -45,7 +45,5 @@ public class UserAccountInfoUpdater extends AsyncTask<String, String, String> {
         return "";
     }
 
-
-
     private Context context;
 }

@@ -58,19 +58,26 @@ public class LoginActivity extends AppCompatActivity {
                     spe.putString("serverAddr", txt_server_addr.getText().toString());
                     spe.putInt("serverPort", Integer.valueOf(txt_server_port.getText().toString()));
                     spe.apply();
-                    new AuthTockenRequester(getApplicationContext()).execute(txt_username.getText().toString(), txt_password.getText().toString());
-                    int token = sp.getInt("token",-3);
-                    if(token == -2)
-                    {
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
-                        toast.show();
-                    }
-                    else {
-                        Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(intent);
-                    }
+                    AuthTockenRequester areq = new AuthTockenRequester(getApplicationContext()){
+
+                    @Override
+                    public void onPostExecute(String ret) {
+                        int token = sp.getInt("token",-3);
+                        if(token == -2)
+                        {
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
+                            toast.show();
+                        }
+                        else {
+                            Intent intent = new Intent(LoginActivity.this, PlanActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            startActivity(intent);
+                        }
+                        }
+                    };
+
+                    areq.execute(txt_username.getText().toString(), txt_password.getText().toString());
                 }
             }
         });

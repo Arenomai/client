@@ -45,6 +45,10 @@ public class UserAccountInfoRequester extends AsyncTask<String, String, String> 
             e.printStackTrace();
         }
         return "";
+
+    }
+    @Override
+    protected void onPostExecute(String reponse) {
     }
 
 

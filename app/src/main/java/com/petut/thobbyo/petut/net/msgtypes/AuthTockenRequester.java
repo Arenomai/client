@@ -34,26 +34,25 @@ public class AuthTockenRequester extends AsyncTask<String, String, String> {
         final SharedPreferences.Editor spe = sp.edit();
 
         try {
-            co.connect(sp.getString("serverAddr","thgros.fr"),sp.getInt("serverPort",4242));
+            co.connect(sp.getString("serverAddr", "thgros.fr"), sp.getInt("serverPort", 4242));
             OutMessage omsg = new OutMessage(MessageType.Auth, Auth.Subtype.Request);
             omsg.writeString(params[0]);
             omsg.writeString(params[1]);
             co.write(omsg);
             InMessage inmsg = co.read();
-            if(inmsg.getSubtype() == Auth.Subtype.Denied)
-            {
-                spe.putInt("token",-2);
-            }
-            else{
-            int token = inmsg.readI32();
-            spe.putInt("token",token);
+            if (inmsg.getSubtype() == Auth.Subtype.Denied) {
+                spe.putInt("token", -2);
+            } else {
+                int token = inmsg.readI32();
+                spe.putInt("token", token);
             }
             spe.apply();
             co.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return "ERROR";
         }
-    return "";
+        return "";
     }
 }
 
