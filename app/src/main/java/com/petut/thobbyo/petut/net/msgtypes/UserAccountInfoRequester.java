@@ -17,21 +17,17 @@ import java.io.IOException;
  */
 
 public class UserAccountInfoRequester extends AsyncTask<String, String, String> {
-    public UserAccountInfoRequester(Context ctx) {
+    public UserAccountInfoRequester(Context ctx, Connection co) {
         context = ctx;
+        this.co = co;
     }
-    private final Connection co = new Connection();
+    private Connection co;
 
     @Override
     protected String doInBackground(String... params)
     {
         final SharedPreferences sp = context.getSharedPreferences(Application.PREF_DEFAULT, 0);
         final SharedPreferences.Editor spe = sp.edit();
-        try {
-            co.connect(sp.getString("serverAddr","thgros.fr"),sp.getInt("serverPort",4242));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         OutMessage omsg = new OutMessage(MessageType.UserAccount, UserAccount.Subtype.InfoRequest);
         omsg.writeI32(sp.getInt("token",-1));
         co.write(omsg);
@@ -39,19 +35,12 @@ public class UserAccountInfoRequester extends AsyncTask<String, String, String> 
         spe.putString("nick",inmsg.readString());
         spe.putString("bio",inmsg.readString());
         spe.apply();
-        try {
-            co.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return "";
 
     }
     @Override
     protected void onPostExecute(String reponse) {
     }
-
-
-
+    
     private Context context;
 }

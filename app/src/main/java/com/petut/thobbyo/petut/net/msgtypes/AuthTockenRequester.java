@@ -20,25 +20,20 @@ public class AuthTockenRequester extends AsyncTask<String, Void, Integer> {
 
     @Override
     protected Integer doInBackground(String... params) {
-        try {
-            OutMessage omsg = new OutMessage(MessageType.Auth, Auth.Subtype.Request);
-            omsg.writeString(params[0]);
-            omsg.writeString(params[1]);
-            co.write(omsg);
-            InMessage inmsg = co.read();
 
-            int token;
-            if (inmsg.getSubtype() == Auth.Subtype.Denied) {
-                token = -2;
-            } else {
-                token = inmsg.readI32();
-            }
-            co.close();
-            return token;
-        } catch (IOException e) {
-            e.printStackTrace();
+        OutMessage omsg = new OutMessage(MessageType.Auth, Auth.Subtype.Request);
+        omsg.writeString(params[0]);
+        omsg.writeString(params[1]);
+        co.write(omsg);
+        InMessage inmsg = co.read();
+
+        int token;
+        if (inmsg.getSubtype() == Auth.Subtype.Denied) {
+            token = -2;
+        } else {
+            token = inmsg.readI32();
         }
-        return null;
+        return token;
     }
 }
 
