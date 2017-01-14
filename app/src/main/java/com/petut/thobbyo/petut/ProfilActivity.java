@@ -18,6 +18,7 @@ public class ProfilActivity extends AppCompatActivity {
     private Button button_profil;
     private TextView textID;
     private EditText editTextPseudo, editTextBio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,11 +28,11 @@ public class ProfilActivity extends AppCompatActivity {
         editTextBio = (EditText) findViewById(R.id.editTextBio);
         final SharedPreferences sp = getSharedPreferences(Application.PREF_DEFAULT, 0);
         final SharedPreferences.Editor spe = sp.edit();
-        UserAccountInfoRequester urq = new UserAccountInfoRequester(getApplicationContext()){
+        UserAccountInfoRequester urq = new UserAccountInfoRequester(getApplicationContext(), Application.getServerConnection()) {
             public void onPostExecute(String ret) {
-                textID.setText(String.valueOf(sp.getInt("token",-1)));
-                editTextPseudo.setText(sp.getString("nick",""));
-                editTextBio.setText(sp.getString("bio",""));
+                textID.setText(String.valueOf(sp.getInt("token", -1)));
+                editTextPseudo.setText(sp.getString("nick", ""));
+                editTextBio.setText(sp.getString("bio", ""));
 
                 button_profil = (Button) findViewById(R.id.buttonProfil);
                 button_profil.setOnClickListener(new View.OnClickListener() {
@@ -39,16 +40,31 @@ public class ProfilActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String nick = editTextPseudo.getText().toString();
                         String bio = editTextBio.getText().toString();
-                        new UserAccountInfoUpdater(getApplicationContext()).execute(nick,bio);
+                        new UserAccountInfoUpdater(getApplicationContext(), Application.getServerConnection()).execute(nick, bio);
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(getApplicationContext(), "Mise à jour effectuée", duration);
                         toast.show();
                     }
-
-
                 });
-                }
+            }
         };
         urq.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        textID = (TextView) findViewById(R.id.textViewID);
+        editTextPseudo = (EditText) findViewById(R.id.editTextPseudo);
+        editTextBio = (EditText) findViewById(R.id.editTextBio);
+        final SharedPreferences sp = getSharedPreferences(Application.PREF_DEFAULT, 0);
+        final SharedPreferences.Editor spe = sp.edit();
+        UserAccountInfoRequester urq = new UserAccountInfoRequester(getApplicationContext(), Application.getServerConnection()) {
+            public void onPostExecute(String ret) {
+                textID.setText(String.valueOf(sp.getInt("token", -1)));
+                editTextPseudo.setText(sp.getString("nick", ""));
+                editTextBio.setText(sp.getString("bio", ""));
+                }
+            };
     }
 }

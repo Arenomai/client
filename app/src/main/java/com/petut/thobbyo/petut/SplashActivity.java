@@ -7,6 +7,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.io.IOException;
+
 public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,5 +46,15 @@ public class SplashActivity extends AppCompatActivity {
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        try {
+            Application.getServerConnection().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

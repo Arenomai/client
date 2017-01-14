@@ -17,33 +17,22 @@ import java.io.IOException;
  */
 
 public class UserAccountInfoUpdater extends AsyncTask<String, String, String> {
-    public UserAccountInfoUpdater(Context ctx) {
+    public UserAccountInfoUpdater(Context ctx, Connection co) {
         context = ctx;
+        this.co = co;
     }
-    private final Connection co = new Connection();
+    private Connection co ;
+    private Context context;
 
     @Override
-    protected String doInBackground(String... params)
-    {
+    protected String doInBackground(String... params) {
         final SharedPreferences sp = context.getSharedPreferences(Application.PREF_DEFAULT, 0);
         final SharedPreferences.Editor spe = sp.edit();
-        try {
-            co.connect(sp.getString("serverAddr","thgros.fr"),sp.getInt("serverPort",4242));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         OutMessage omsg = new OutMessage(MessageType.UserAccount, UserAccount.Subtype.AccountModify);
         omsg.writeString(params[0]);
         omsg.writeString(params[1]);
-        omsg.writeI32(sp.getInt("token",-1));
+        omsg.writeI32(sp.getInt("token", -1));
         co.write(omsg);
-        try {
-            co.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return "";
     }
-
-    private Context context;
 }
