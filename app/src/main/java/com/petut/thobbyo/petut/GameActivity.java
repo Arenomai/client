@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 
 import com.petut.thobbyo.petut.jeuDeCarte.GameLoopThread;
@@ -17,12 +18,21 @@ import java.util.ArrayList;
  */
 
 public class GameActivity extends AppCompatActivity {
-    ///GridView grille;
+
+    //Boutton Tour Suivant
+    private Button button_TS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //GameView game = new GameView(GameActivity.this);
         setContentView(R.layout.activity_game);
+        button_TS = (Button) findViewById(R.id.buttonTourSuivant);
+        button_TS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 }

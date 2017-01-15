@@ -6,12 +6,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 
 import com.petut.thobbyo.petut.GameActivity;
 import com.petut.thobbyo.petut.R;
@@ -50,6 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     // Type de la carte qui est placer
     private int typeC = 1;
+
 
     // Création de la surface de dessin
     public GameView(Context context, AttributeSet attri) {
@@ -197,10 +201,66 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameLoopThread.start();
     }
 
+
+
+    public void mouvement(){
+
+        // Déplace tous les monstres sauf si il y a quelque chose à leurs emplacements d'arrivée
+        synchronized (monstres) {
+
+            for (Monstre m1 : monstres) {
+                boolean avancer = true;
+                for (Monstre m2 : monstres) {
+                    if (m2.getPosY() == m1.posAfterMoov() && m2.getPosX() == m1.getPosX() && m2 != m1) {
+                        avancer = false;
+
+                        if(m1.getAppartenance() != m2.getAppartenance()){
+                            m1.pertDef(m2.getDamage());
+                        }
+                    }
+                }
+
+                synchronized (defenses) {
+
+                    for (Defense d : defenses) {
+                        if (d.getPosY() == m1.posAfterMoov() && d.getPosX() == m1.getPosX()) {
+                            avancer = false;
+
+                            if(m1.getAppartenance() != d.getAppartenance()){
+                                m1.pertDef(d.getDamage());
+                                d.pertDef(m1.getDamage());
+                            }
+                        }
+                    }
+
+                }
+
+                if(m1.posAfterMoov() < 0){
+                    avancer = false;
+                    ennemi.pertePv(m1.getDamage());
+                    m1.pertDef(ennemi.getDamage());
+                }
+
+                if(m1.posAfterMoov() > 8){
+
+                    Log.d(" ami ", m1.posAfterMoov()+"");
+                    avancer = false;
+                    ami.pertePv(m1.getDamage());
+                    m1.pertDef(ami.getDamage());
+                }
+
+                if(avancer){
+                    m1.moov();
+                }
+            }
+
+        }
+    }
+
     // Gère les touchés sur l'écran
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Position du doigt sur l'écrant
+        // Position du doigt sur l'écran
         final int currentX = (int) event.getX();
         final int currentY = (int) event.getY();
 
@@ -217,58 +277,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 
         switch (event.getAction()) {
+
             // code exécuté lorsque le doigt touche l'écran.
             case MotionEvent.ACTION_DOWN:
-
-                // Déplace tous les monstres sauf si il y a quelque chose a leur emplacements d'arriver
-
-                synchronized (monstres) {
-
-                    for (Monstre m1 : monstres) {
-                        boolean avancer = true;
-                        for (Monstre m2 : monstres) {
-                            if (m2.getPosY() == m1.posAfterMoov() && m2.getPosX() == m1.getPosX() && m2 != m1) {
-                                avancer = false;
-
-                                if(m1.getAppartenance() != m2.getAppartenance()){
-                                    m1.pertDef(m2.getDamage());
-                                }
-                            }
-                        }
-
-                        synchronized (defenses) {
-
-                            for (Defense d : defenses) {
-                                if (d.getPosY() == m1.posAfterMoov() && d.getPosX() == m1.getPosX()) {
-                                    avancer = false;
-
-                                    if(m1.getAppartenance() != d.getAppartenance()){
-                                        m1.pertDef(d.getDamage());
-                                        d.pertDef(m1.getDamage());
-                                    }
-                                }
-                            }
-
-                        }
-
-                        if(m1.posAfterMoov() < 0){
-                            avancer = false;
-                            ennemi.pertePv(m1.getDamage());
-                            m1.pertDef(ennemi.getDamage());
-                        }
-
-                        if(m1.posAfterMoov() > 8){
-                            avancer = false;
-                            ami.pertePv(m1.getDamage());
-                            m1.pertDef(ami.getDamage());
-                        }
-
-                        if(avancer){
-                            m1.moov();
-                        }
-                    }
-
-                }
 
                 //On test le choix de la carte du joueurs
                 Matrix plateauSAdef = new Matrix(SAdef);
