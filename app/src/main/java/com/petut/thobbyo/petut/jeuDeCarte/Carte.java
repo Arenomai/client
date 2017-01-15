@@ -24,7 +24,7 @@ public class Carte {
     private int bw, cw;
     private final Paint bordsPaint;
     private final BitmapShader bordBS, coinBS;
-    private int appartenance;
+    protected int appartenance;
 
     public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom, int appartenance){
         this.tailleH = tailleH;
