@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -51,8 +52,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int typeC = 1;
 
     // Création de la surface de dessin
-    public GameView(Context context) {
-        super(context);
+    public GameView(Context context, AttributeSet attri) {
+        super(context, attri);
         getHolder().addCallback(this);
         gameLoopThread = new GameLoopThread(this);
 
@@ -329,7 +330,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     // Crée une carte
                     if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
                         if (typeC == 1) {
-                            def = new Defense(50, 50, x, y, 4, 1, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
+                            def = new Defense(50, 50, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
                         }
                     }
 

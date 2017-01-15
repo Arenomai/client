@@ -17,12 +17,12 @@ import java.util.ArrayList;
  */
 
 public class GameActivity extends AppCompatActivity {
-    GridView grille;
+    ///GridView grille;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GameView game = new GameView(GameActivity.this);
-        setContentView(game);
+        //GameView game = new GameView(GameActivity.this);
+        setContentView(R.layout.activity_game);
     }
 }

@@ -130,11 +130,12 @@ public class Carte {
     }
 
     public Image getImg(){return img ;}
+    
     public int getPosX(){
         return posX;
     }
 
-    public  int getPosY(){
+    public int getPosY(){
         return posY;
     }
 
