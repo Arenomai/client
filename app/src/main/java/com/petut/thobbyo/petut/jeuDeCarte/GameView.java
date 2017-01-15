@@ -53,6 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     // Type de la carte qui est placer
     private int typeC = 1;
+    private int cartePoser = 0;
 
 
     // Création de la surface de dessin
@@ -259,6 +260,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ennemi.IA(monstres, defenses, this.getContext());
             }
         }
+        cartePoser = 0;
     }
 
     // Gère les touchés sur l'écran
@@ -321,59 +323,67 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Monstre atta = null;
                 Defense def = null;
 
-                //On verifie qu'il n'y a pas déjà une carte a cette endroi
-                boolean pasOcuper = true;
+                //Cas ou on n'a pas encore poser de carte
+                if(cartePoser == 0) {
 
-                synchronized (monstres) {
+                    //On verifie qu'il n'y a pas déjà une carte a cette endroi
+                    boolean pasOcuper = true;
 
-                    for (Monstre m : monstres) {
-                        if (m.getPosY() == y && m.getPosX() == x) {
-                            pasOcuper = false;
-                        }
-                    }
-                }
-
-                synchronized (defenses) {
-                    for (Defense d : defenses) {
-                        if (d.getPosY() == y && d.getPosX() == x) {
-                            pasOcuper = false;
-                        }
-                    }
-                }
-
-
-                //on place la carte a l'endroit ou le joueures a appuiller
-                if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau && pasOcuper) {
-                    // Crée une carte
-                    if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
-                        if (typeC == 1) {
-                            def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
-                        }
-                    }
-
-                    if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*7/9 && y < hauteurPlateau) {
-                        if (typeC == 2) {
-                            atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
-                        }
-                    }
-
-                    /*if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
-                        if (typeC == 3) {
-                            atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
-                        }
-                    }*/
-
-                    // On ajoute le monstre à la liste
                     synchronized (monstres) {
-                        if (atta != null){
-                            monstres.add(atta);
+
+                        for (Monstre m : monstres) {
+                            if (m.getPosY() == y && m.getPosX() == x) {
+                                pasOcuper = false;
+                            }
                         }
                     }
 
-                    // On ajoute la defence à la liste
-                    synchronized (defenses){
-                        if(def != null){
-                            defenses.add(def);
+                    synchronized (defenses) {
+                        for (Defense d : defenses) {
+                            if (d.getPosY() == y && d.getPosX() == x) {
+                                pasOcuper = false;
+                            }
+                        }
+                    }
+
+
+                    //on place la carte a l'endroit ou le joueures a appuiller
+                    if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau && pasOcuper) {
+                        //Le joueurs pose une carte
+
+                        // Crée une carte
+                        if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau * 5 / 9 && y < hauteurPlateau * 7 / 9) {
+                            if (typeC == 1) {
+                                cartePoser = 1;
+                                def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
+                            }
+                        }
+
+                        if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau * 7 / 9 && y < hauteurPlateau) {
+                            if (typeC == 2) {
+                                cartePoser = 1;
+                                atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
+                            }
+                        }
+
+                        /*if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
+                            if (typeC == 3) {
+                                atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
+                            }
+                        }*/
+
+                        // On ajoute le monstre à la liste
+                        synchronized (monstres) {
+                            if (atta != null) {
+                                monstres.add(atta);
+                            }
+                        }
+
+                        // On ajoute la defence à la liste
+                        synchronized (defenses) {
+                            if (def != null) {
+                                defenses.add(def);
+                            }
                         }
                     }
                 }
