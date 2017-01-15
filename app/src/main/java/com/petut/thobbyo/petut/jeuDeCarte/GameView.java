@@ -169,12 +169,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         for(Carte a : suppr){
 
-            if(a instanceof Monstre ){
-                monstres.remove(a);
+            synchronized (monstres){
+                if(a instanceof Monstre ){
+                    monstres.remove(a);
+                }
             }
 
-            if(a instanceof Defense){
-                defenses.remove(a);
+            synchronized (defenses){
+                if(a instanceof Defense){
+                    defenses.remove(a);
+                }
             }
         }
 
@@ -248,14 +252,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         }
 
                         if(m1.posAfterMoov() < 0){
-                            Log.d(" ennemie ", m1.posAfterMoov()+"");
                             avancer = false;
                             ennemi.pertePv(m1.getDamage());
                             m1.pertDef(ennemi.getDamage());
                         }
 
-                        if(m1.posAfterMoov() > 9){
-                            Log.d(" ami ", m1.posAfterMoov()+"");
+                        if(m1.posAfterMoov() > 8){
                             avancer = false;
                             ami.pertePv(m1.getDamage());
                             m1.pertDef(ami.getDamage());
@@ -307,6 +309,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 //On verifie qu'il n'y a pas déjà une carte a cette endroi
                 boolean pasOcuper = true;
+
                 synchronized (monstres) {
 
                     for (Monstre m : monstres) {
@@ -330,7 +333,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     // Crée une carte
                     if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau*5/9 && y < hauteurPlateau*7/9) {
                         if (typeC == 1) {
-                            def = new Defense(50, 50, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
+                            def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
                         }
                     }
 
@@ -362,6 +365,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 break;
         }
+
+        synchronized (monstres){
+            synchronized (defenses){
+                ennemi.IA(monstres, defenses, this.getContext());
+            }
+        }
+
         return false;
     }
 

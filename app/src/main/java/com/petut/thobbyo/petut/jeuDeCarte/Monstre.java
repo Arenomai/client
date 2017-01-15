@@ -1,5 +1,7 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
+import android.util.Log;
+
 /**
  * Created by Thobbyo on 10/10/2016.
  */
@@ -48,16 +50,24 @@ public class Monstre extends Carte {
     }
 
     public void moov(){
-        if(getAppartenance() == 0){
+        if(appartenance == 0){
             posY += tailleH;
         }
-        if(getAppartenance() == 1){
+        if(appartenance == 1){
             posY -= tailleH;
         }
     }
 
     public int posAfterMoov(){
-        return posY - tailleH;
+        int a = -1;
+        if(appartenance == 0){
+            a = posY + tailleH;
+        }
+        if(appartenance == 1){
+            a = posY - tailleH;
+        }
+        Log.d("a", a+"");
+        return a;
     }
 
     public void pertDef(int v){
