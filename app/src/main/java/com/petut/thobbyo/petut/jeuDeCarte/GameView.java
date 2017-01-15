@@ -1,12 +1,16 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -356,6 +360,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             if (typeC == 1) {
                                 cartePoser = 1;
                                 def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
+                                def.setBorderColors(Color.BLUE, Color.BLUE, Color.BLUE);
                             }
                         }
 
@@ -363,6 +368,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             if (typeC == 2) {
                                 cartePoser = 1;
                                 atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
+                                atta.setBorderColors(Color.BLUE, Color.BLUE, Color.BLUE);
                             }
                         }
 
@@ -443,8 +449,35 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void stop(){
         if(ami.getPv() < 0 || ennemi.getPv() < 0){
+            gameLoopThread.setRunning(false);
             final GameActivity context = (GameActivity) this.getContext();
-            context.finish();
+
+            //on change le message en fonction de si le joueurs  a gagner ou perdu.
+            String msg = "";
+            if(ami.getPv() < 0){
+                msg = "Vous êtes vraiment une tanche...\n Vous avez perdu contre une IA qui joue random.";
+            }
+            if(ennemi.getPv() < 0){
+                msg = "Vous êtes vraiment une exeption...\n Vous avez gagnez contre une IA qui joue random.";
+            }
+            final String MSG = msg;
+
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setMessage(MSG);
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id){
+                            dialog.cancel();
+                            context.finish();
+                        }
+                    });
+                    AlertDialog alert = alertDialogBuilder.create();
+                    alert.show();
+                }
+            });
         }
     }
 

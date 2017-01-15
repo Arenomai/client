@@ -1,6 +1,7 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.petut.thobbyo.petut.R;
 
@@ -55,13 +56,17 @@ public class Joueurs {
             if(randomInt == 0) {
                 int randY = randomInteger(0, 1, ran);
                 int randX = randomInteger(0, 4, ran);
-                monstre.add(new Monstre(1, 1, randX, randY, 1, 2, 2, "Monstre pas bô", new Image(contexte, R.mipmap.monstre_sourire), 0));
+                Monstre mm = new Monstre(1, 1, randX, randY, 1, 2, 2, "Monstre pas bô", new Image(contexte, R.mipmap.monstre_sourire), 0);
+                mm.setBorderColors(Color.RED, Color.RED, Color.RED);
+                monstre.add(mm);
             }
 
             if(randomInt == 1){
                 int randY = randomInteger(2, 3, ran);
                 int randX = randomInteger(0, 4, ran);
-                defense.add(new Defense(1, 1, randX, randY, 4, 0, "MÛRE", new Image(contexte, R.mipmap.bleu_mur_icone_128), 0));
+                Defense dd = new Defense(1, 1, randX, randY, 4, 0, "MÛRE", new Image(contexte, R.mipmap.bleu_mur_icone_128), 0);
+                dd.setBorderColors(Color.RED, Color.RED, Color.RED);
+                defense.add(dd);
             }
         }
     }
