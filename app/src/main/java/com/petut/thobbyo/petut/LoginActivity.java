@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Object... params) {
             String host = (String) params[0];
             int port = (int) params[1];
-            if(Application.getServerConnection() == null)
             try {
                 Application.getServerConnection()
                         .connect(host, port);
