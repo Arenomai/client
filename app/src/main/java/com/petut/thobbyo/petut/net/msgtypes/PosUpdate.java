@@ -10,7 +10,8 @@ public class PosUpdate {
 
     public static abstract class Subtype {
         public static final byte
-                Notify = 0;
+                EventGet = 0,
+                EventGetResponse = 1;
     }
 
     public static class Notify implements Serializable {

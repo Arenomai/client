@@ -31,8 +31,10 @@ import com.petut.thobbyo.petut.Armes.Attaque.HacheOr;
 import com.petut.thobbyo.petut.Armes.Defense.BouclierBois;
 import com.petut.thobbyo.petut.Armes.ObjetPlan;
 import com.petut.thobbyo.petut.jeuDeCarte.GameView;
+import com.petut.thobbyo.petut.net.msgtypes.PosUpdateEventRequester;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.petut.thobbyo.petut.R.id.markerViewContainer;
 import static com.petut.thobbyo.petut.R.id.view;
@@ -71,9 +73,10 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                 toggleGps(true);
 
                 final ArrayList<ObjetPlan> listeObjets = new ArrayList<>();
+                locationServices.getLastLocation();
+
 
                 // POUR LE SERVEUR : Donner les objets autour du joueur à la position actuelle
-
                 listeObjets.add(new ObjetPlan(new HacheFer(), 45, 4, false));
                 listeObjets.add(new ObjetPlan(new BouclierBois(), 45, 5, false));
                 listeObjets.add(new ObjetPlan(new HacheOr(), 44, 4, true));
@@ -87,27 +90,6 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mapboxMap.addMarker(marqueurObj);
                 }
 
-                mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull Marker marker) {
-
-                        ObjetPlan obj = listeObjets.get((int) marker.getId());
-                        if(obj.getSeMerite() == true) {
-
-                            Intent intent = new Intent(PlanActivity.this, GameActivity.class);
-                            PlanActivity.this.startActivity(intent);
-
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext(), "Objet récupéré : "+obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
-                            mapboxMap.removeMarker(marker);
-
-                            // POUR LE SERVEUR : Dire au serveur quel objet a été récupéré dans l'inventaire
-                        }
-                        return true;
-                    }
-                });
-
                 if(locationServices.getLastLocation() != null) {
                     CameraPosition position = new CameraPosition.Builder()
                             .target(new LatLng(locationServices.getLastLocation()))
@@ -116,6 +98,47 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .build(); // Creates a CameraPosition from the builder
 
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 2000);
+                PosUpdateEventRequester psu = new PosUpdateEventRequester(getApplicationContext(),Application.getServerConnection())
+                {
+                        @Override
+                        public void onPostExecute(List<LatLng> list) {
+                            for (int i = 0;i<list.size();i++)
+                            {
+                                System.out.println(list.get(i).getLatitude());
+                                System.out.println(list.get(i).getLongitude());
+                                MarkerViewOptions marqueurCombat = new MarkerViewOptions().position(list.get(i));
+                                marqueurCombat.title("Combat");
+                                marqueurCombat.snippet("Combat");
+                                marqueurCombat.getMarker().setId(i);
+                                mapboxMap.addMarker(marqueurCombat);
+                                mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                                    @Override
+                                    public boolean onMarkerClick(@NonNull Marker marker) {
+                                        if(marker.getTitle().equals("Combat"))
+                                        {
+                                            Intent intent = new Intent(PlanActivity.this, GameActivity.class);
+                                            PlanActivity.this.startActivity(intent);
+                                        }
+                                        else {
+                                            ObjetPlan obj = listeObjets.get((int) marker.getId());
+                                            if (obj.getSeMerite() == true) {
+
+                                                Intent intent = new Intent(PlanActivity.this, GameActivity.class);
+                                                PlanActivity.this.startActivity(intent);
+
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Objet récupéré : " + obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
+                                                mapboxMap.removeMarker(marker);
+
+                                                // POUR LE SERVEUR : Dire au serveur quel objet a été récupéré dans l'inventaire
+                                            }
+                                        }
+                                        return true;
+                                    }
+                                });
+                            }
+                }};
+                    psu.execute(locationServices.getLastLocation().getLatitude(),locationServices.getLastLocation().getLongitude());
                 }
             }
         });
