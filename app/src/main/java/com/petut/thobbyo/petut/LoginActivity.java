@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Object... params) {
             String host = (String) params[0];
             int port = (int) params[1];
+            if(Application.getServerConnection() == null)
             try {
                 Application.getServerConnection()
                         .connect(host, port);
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         AuthTockenRequester atr = new AuthTockenRequester(Application.getServerConnection()) {
             @Override
             public void onPostExecute(Integer token) {
-                if (token != null || token == -2) {
+                if (token != null && token != -2) {
                     final SharedPreferences.Editor spe = sp.edit();
                     spe.putInt("token", token);
                     spe.apply();
