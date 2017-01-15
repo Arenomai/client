@@ -12,6 +12,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import com.petut.thobbyo.petut.R;
+
+import static android.graphics.Color.*;
+
 public class Carte {
 
     protected int tailleW;
@@ -19,11 +22,13 @@ public class Carte {
     protected int posX;
     protected int posY;
     protected Image img;
+
+    private final int borderColors[] = new int[3];
     private Bitmap bmpBord, bmpCoin;
     private float border;
     private int bw, cw;
-    private final Paint bordsPaint;
-    private final BitmapShader bordBS, coinBS;
+    private Paint bordsPaint;
+    private BitmapShader bordBS, coinBS;
     protected int appartenance;
 
     public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom, int appartenance){
@@ -33,12 +38,36 @@ public class Carte {
         this.posY = posY;
         this.img = img;
         this.img.load();
-        final Context c = img.getContext();
         this.appartenance = appartenance;
+        setBorderColors(RED, GREEN, BLUE);
+    }
+
+    private Bitmap replaceColors(final Bitmap src, int c1, int c2, int c3) {
+        int pixels[] = new int[src.getWidth() * src.getHeight()];
+        src.getPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
+        final int c1r = red(c1), c1g = green(c1), c1b = blue(c1), c1a = alpha(c1),
+                c2r = red(c2), c2g = green(c2), c2b = blue(c2), c2a = alpha(c2),
+                c3r = red(c3), c3g = green(c3), c3b = blue(c3), c3a = alpha(c3);
+        for (int i = 0; i < src.getWidth() * src.getHeight(); ++i) {
+            final int r = red(pixels[i]),
+                    g = green(pixels[i]),
+                    b = blue(pixels[i]),
+                    a = alpha(pixels[i]);
+            pixels[i] = argb(
+                    a,
+                    (r * c1r)/255 + (g * c2r)/255 + (b * c3r)/255,
+                    (r * c1g)/255 + (g * c2g)/255 + (b * c3g)/255,
+                    (r * c1b)/255 + (g * c2b)/255 + (b * c3b)/255);
+        }
+        return Bitmap.createBitmap(pixels, src.getWidth(), src.getHeight(), src.getConfig());
+    }
+
+    public void setBorderColors(int c1, int c2, int c3) {
+        final Context c = img.getContext();
         Drawable dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_bord);
-        bmpBord = ((BitmapDrawable) dr).getBitmap();
+        bmpBord = replaceColors(((BitmapDrawable) dr).getBitmap(), c1, c2, c3);
         dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_coin);
-        bmpCoin = ((BitmapDrawable) dr).getBitmap();
+        bmpCoin = replaceColors(((BitmapDrawable) dr).getBitmap(), c1, c2, c3);
         bw = bmpBord.getWidth();
         cw = bmpCoin.getWidth();
         setBorder(0.1f);
