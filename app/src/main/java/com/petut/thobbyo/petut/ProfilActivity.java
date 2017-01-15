@@ -12,10 +12,14 @@ import android.widget.Toast;
 import com.petut.thobbyo.petut.net.msgtypes.UserAccountInfoRequester;
 import com.petut.thobbyo.petut.net.msgtypes.UserAccountInfoUpdater;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 
 public class ProfilActivity extends AppCompatActivity {
 
     private Button button_profil;
+    private Button button_deco;
     private TextView textID;
     private EditText editTextPseudo, editTextBio;
 
@@ -44,6 +48,24 @@ public class ProfilActivity extends AppCompatActivity {
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(getApplicationContext(), "Mise à jour effectuée", duration);
                         toast.show();
+                    }
+                });
+
+                button_deco = (Button) findViewById(R.id.buttonDeconnection);
+                button_deco.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        try {
+                            Application.getServerConnection().close();
+                        } catch (IOException e) {
+                        }
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(getApplicationContext(), "Déconnexion", duration);
+                        toast.show();
+                        System.exit(0);
+
+
                     }
                 });
             }

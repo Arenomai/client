@@ -36,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textView9"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:weightSum="1">
 
         <Space
             android:layout_width="match_parent"
@@ -97,6 +98,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buttonProfil" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="Se déconnecter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDeconnection" />
+
     </LinearLayout>
 
 </RelativeLayout>

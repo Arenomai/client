@@ -235,4 +235,6 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
+    
 }
