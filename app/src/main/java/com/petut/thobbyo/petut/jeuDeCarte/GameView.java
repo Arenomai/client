@@ -242,8 +242,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
                 if(m1.posAfterMoov() > 8){
-
-                    Log.d(" ami ", m1.posAfterMoov()+"");
                     avancer = false;
                     ami.pertePv(m1.getDamage());
                     m1.pertDef(ami.getDamage());
@@ -254,6 +252,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
 
+        }
+
+        synchronized (monstres){
+            synchronized (defenses){
+                ennemi.IA(monstres, defenses, this.getContext());
+            }
         }
     }
 
@@ -313,7 +317,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }*/
 
                 //fin du test
-
 
                 Monstre atta = null;
                 Defense def = null;
@@ -375,12 +378,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }
                 break;
-        }
-
-        synchronized (monstres){
-            synchronized (defenses){
-                ennemi.IA(monstres, defenses, this.getContext());
-            }
         }
 
         return false;

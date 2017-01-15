@@ -66,7 +66,6 @@ public class Monstre extends Carte {
         if(appartenance == 1){
             a = posY - tailleH;
         }
-        Log.d("a", a+"");
         return a;
     }
 
