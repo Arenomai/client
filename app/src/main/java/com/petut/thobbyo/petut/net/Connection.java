@@ -18,11 +18,9 @@ public class Connection {
     private byte[] messageBuffer = null;
     private int messageBytesReceived = 0;
 
-    public Connection() {
-        chaussette = new Socket();
-    }
 
     public void connect(final String host, final int port) throws IOException {
+        chaussette = new Socket();
         InetSocketAddress addr = new InetSocketAddress(host, port);
         chaussette.connect(addr);
         chaussette.setTcpNoDelay(true);

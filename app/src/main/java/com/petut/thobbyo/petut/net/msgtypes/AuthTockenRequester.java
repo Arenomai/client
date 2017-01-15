@@ -7,8 +7,6 @@ import com.petut.thobbyo.petut.net.InMessage;
 import com.petut.thobbyo.petut.net.MessageType;
 import com.petut.thobbyo.petut.net.OutMessage;
 
-import java.io.IOException;
-
 
 public class AuthTockenRequester extends AsyncTask<String, Void, Integer> {
 
