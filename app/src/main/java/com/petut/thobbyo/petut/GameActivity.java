@@ -31,7 +31,8 @@ public class GameActivity extends AppCompatActivity {
         button_TS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                GameView GV = (GameView) findViewById(R.id.ViewGame);
+                GV.mouvement();
             }
         });
     }
