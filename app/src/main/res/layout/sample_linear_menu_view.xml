@@ -16,7 +16,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/menu_plan"
         android:layout_margin="10dp" />
@@ -29,7 +28,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/menu_moi"
         android:layout_margin="10dp" />
@@ -42,7 +40,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/menu_armes"
         android:layout_margin="10dp" />
@@ -55,7 +52,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/menu_cartes"
         android:layout_margin="10dp" />
@@ -68,7 +64,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/menu_about"
         android:layout_margin="10dp" />

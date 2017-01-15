@@ -18,7 +18,6 @@
         android:layout_weight="0.5"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:onClick="clickOne"
         android:background="@null"
         android:src="@drawable/attaque_epee_fer"
         android:layout_width="match_parent" />
