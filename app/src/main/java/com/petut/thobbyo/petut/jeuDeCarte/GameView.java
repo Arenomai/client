@@ -3,22 +3,16 @@ package com.petut.thobbyo.petut.jeuDeCarte;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
 
 import com.petut.thobbyo.petut.GameActivity;
 import com.petut.thobbyo.petut.R;
@@ -39,26 +33,35 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private float[] pointsGrille;
     private final Matrix matricePlateau = new Matrix();
     private int largeurPlateau, hauteurPlateau;
-    private int choix = 0;
 
     // Matrices des cartes pour optenir leur position
     private Matrix SAdef = new Matrix();
     private Matrix SAatta = new Matrix();
-    private Matrix SAsort = new Matrix();
+    // private Matrix SAsort = new Matrix();
 
     // Liste des carte qui sont sur le plateau
-    List<Monstre> monstres = new ArrayList<>();
-    List<Defense> defenses = new ArrayList<>();
-    List<Sort> sorts = new ArrayList<>();
+    final List<Monstre> monstres = new ArrayList<>();
+    final List<Defense> defenses = new ArrayList<>();
+    final List<Sort> sorts = new ArrayList<>();
 
     //les 2 dieux qui place leur larbin sur le terrun
     Joueurs ami = new Joueurs(6, 1, 1);
     Joueurs ennemi = new Joueurs(6, 1, 0);
 
     // Type de la carte qui est placer
-    private int typeC = 1;
-    private int cartePoser = 0;
+    private enum TypeCarte {
+        Defense,
+        Attaque
+    }
+    private TypeCarte typeCarteSelectionnee;
+    private Carte cartePosee = null;
 
+    // Cartes pour la selection de la carte active
+    private Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "", -1);
+    private Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "", -1);
+
+    private final Paint fondDefense, fondAttaque;
+    private final Carte carteFond;
 
     // Création de la surface de dessin
     public GameView(Context context, AttributeSet attri) {
@@ -66,11 +69,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         gameLoopThread = new GameLoopThread(this);
 
+        carteFond = new Carte(getContext());
+        final int baseColor = ContextCompat.getColor(getContext(), R.color.arenomai_fond_plateau);
+        carteFond.setBorderColors(baseColor - 0x070707, baseColor - 0x0E0E0E, baseColor - 0x151515);
+        carteFond.setBorder(0.05f);
+        fondDefense = new Paint();
+        fondDefense.setColor(Color.argb(32, 0, 127, 255));
+        fondAttaque = new Paint();
+        fondAttaque.setColor(Color.argb(32, 255, 127, 0));
+
         peintureGrille = new Paint();
         peintureGrille.setStyle(Paint.Style.STROKE);
         peintureGrille.setStrokeWidth(0.01f);
         peintureGrille.setColor(Color.WHITE);
         setTaillePlateau(5, 9, peintureGrille.getStrokeWidth());
+
+        setTypeCarteSelectionnee(TypeCarte.Defense);
     }
 
     private void setTaillePlateau(int largeur, int hauteur, float epaisseur) {
@@ -95,7 +109,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void dessinerGrille(Canvas canvas) {
-        canvas.drawLines(pointsGrille, peintureGrille);
+        // canvas.drawLines(pointsGrille, peintureGrille);
+        Matrix m = new Matrix();
+        for (int x = 0; x < largeurPlateau; ++x) {
+            for (int y = 0; y < hauteurPlateau; ++y) {
+                m.setScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
+                m.postTranslate((float) x / largeurPlateau,
+                        (float) y / hauteurPlateau);
+                canvas.save();
+                canvas.concat(m);
+                if (peutPlacerCarte(TypeCarte.Attaque, x, y)) {
+                    carteFond.setCouleurFond(fondAttaque);
+                } else if (peutPlacerCarte(TypeCarte.Defense, x, y)) {
+                    carteFond.setCouleurFond(fondDefense);
+                } else {
+                    carteFond.setCouleurFond(null);
+                }
+                carteFond.dessiner(canvas);
+                canvas.restore();
+            }
+        }
     }
 
     // Fonction qui "dessine" un écran de jeu
@@ -113,10 +146,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canMtx.concat(matricePlateau);
 
         dessinerGrille(canvas);
-
-        //Carte pour la selection de la carte
-        Carte def = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.bleu_mur_icone_128 ), "", -1);
-        Carte atta = new Carte(50, 50, 0, 0, new Image(this.getContext(), R.mipmap.monstre_sourire), "", -1);
 
         Matrix Adef = new Matrix();
         Adef.postScale(1.f / largeurPlateau, 1.f / hauteurPlateau);
@@ -199,7 +228,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         // création du processus GameLoopThread si cela n'est pas fait
-        if(gameLoopThread.getState() == Thread.State.TERMINATED) {
+        if (gameLoopThread.getState() == Thread.State.TERMINATED) {
             gameLoopThread = new GameLoopThread(this);
         }
         gameLoopThread.setRunning(true);
@@ -264,7 +293,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ennemi.IA(monstres, defenses, this.getContext());
             }
         }
-        cartePoser = 0;
+        cartePosee = null;
+    }
+
+    private void setTypeCarteSelectionnee(TypeCarte tc) {
+        typeCarteSelectionnee = tc;
+        final Carte actif = tc == TypeCarte.Attaque ? atta : def;
+        final Carte inactif = tc == TypeCarte.Attaque ? def : atta;
+        actif.setBorderColors(0xFFE0E000, 0xFFC0C000, 0xFFA0A000);
+        inactif.setBorderColors(0xFF404040, 0xFF303030, 0xFF202020);
+    }
+
+    public boolean peutPlacerCarte(TypeCarte tc, int x, int y) {
+        if (x < 0 || x >= largeurPlateau) {
+            return false;
+        }
+        switch (tc) {
+            case Defense:
+                return y >= hauteurPlateau * 5 / 9 && y < hauteurPlateau * 7 / 9;
+            case Attaque:
+                return y >= hauteurPlateau * 7 / 9 && y < hauteurPlateau;
+        }
+        return false;
     }
 
     // Gère les touchés sur l'écran
@@ -301,7 +351,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 points = new float[] { currentX, currentY };
                 inv.mapPoints(points);
                 if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
-                    typeC = 1;
+                    setTypeCarteSelectionnee(TypeCarte.Defense);
                 }
 
 
@@ -314,12 +364,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 points = new float[] { currentX, currentY };
                 inv.mapPoints(points);
                 if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
-                    typeC = 2;
+                    setTypeCarteSelectionnee(TypeCarte.Attaque);
                 }
 
 
                 /*if(points[0] >= 0 && points[0] <= 1 && points[1] >= 0 && points[1] <= 1){
-                    typeC = 3;
+                    typeCarteSelectionnee = 3;
                 }*/
 
                 //fin du test
@@ -328,7 +378,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Defense def = null;
 
                 //Cas ou on n'a pas encore poser de carte
-                if(cartePoser == 0) {
+                if (cartePosee == null) {
 
                     //On verifie qu'il n'y a pas déjà une carte a cette endroi
                     boolean pasOcuper = true;
@@ -356,24 +406,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         //Le joueurs pose une carte
 
                         // Crée une carte
-                        if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau * 5 / 9 && y < hauteurPlateau * 7 / 9) {
-                            if (typeC == 1) {
-                                cartePoser = 1;
-                                def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
-                                def.setBorderColors(Color.BLUE, Color.BLUE, Color.BLUE);
-                            }
+                        switch (typeCarteSelectionnee) {
+                            case Defense:
+                                if (peutPlacerCarte(TypeCarte.Defense, x, y)) {
+                                    def = new Defense(1, 1, x, y, 4, 0, "MÛRE", new Image(this.getContext(), R.mipmap.bleu_mur_icone_128), 1);
+                                    cartePosee = def;
+                                }
+                                break;
+                            case Attaque:
+                                if (peutPlacerCarte(TypeCarte.Attaque, x, y)) {
+                                    atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
+                                    cartePosee = atta;
+                                }
+                                break;
                         }
 
-                        if (x >= 0 && x < largeurPlateau && y >= hauteurPlateau * 7 / 9 && y < hauteurPlateau) {
-                            if (typeC == 2) {
-                                cartePoser = 1;
-                                atta = new Monstre(1, 1, x, y, 1, 2, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire), 1);
-                                atta.setBorderColors(Color.BLUE, Color.BLUE, Color.BLUE);
-                            }
+                        if (cartePosee != null) {
+                            cartePosee.setBorderColors(0xFF0000E0, 0xFF0000C0, 0xFF0000A0);
                         }
 
                         /*if (x >= 0 && x < largeurPlateau && y >= 0 && y < hauteurPlateau) {
-                            if (typeC == 3) {
+                            if (typeCarteSelectionnee == 3) {
                                 atta = new Monstre(1, 1, x, y, 1, 0, 2, "Monstre pas bô", new Image(this.getContext(), R.mipmap.monstre_sourire));
                             }
                         }*/
@@ -411,8 +464,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             try {
                 gameLoopThread.join();
                 retry = false;
+            } catch (InterruptedException e) {
+                break;
             }
-            catch (InterruptedException e) {}
         }
     }
 
@@ -447,25 +501,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         fondCouleur.setPixels(pixels, 0, w, 0, 0, w, h);
     }
 
-    public void stop(){
-        if(ami.getPv() < 0 || ennemi.getPv() < 0){
+    public void stop() {
+        if (ami.getPv() < 0 || ennemi.getPv() < 0) {
             gameLoopThread.setRunning(false);
             final GameActivity context = (GameActivity) this.getContext();
 
-            //on change le message en fonction de si le joueurs  a gagner ou perdu.
+            // On change le message en fonction de si le joueur a gagné ou perdu.
             String msg = "";
-            if(ami.getPv() < 0){
-                msg = "Vous n'êtes pas vraiment fort...\n Vous avez perdu contre une IA qui joue random.";
+            if (ami.getPv() < 0) {
+                msg = "Vous êtes vraiment une tanche...\nVous avez perdu contre une IA qui joue random.";
             }
-            if(ennemi.getPv() < 0){
-                msg = "Vous êtes vraiment une exception...\n Vous avez gagné contre une IA qui joue random.";
+            if (ennemi.getPv() < 0) {
+                msg = "Vous êtes vraiment une exception...\nVous avez gagné contre une IA qui joue random.";
             }
             final String MSG = msg;
 
             context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                     alertDialogBuilder.setMessage(MSG);
                     alertDialogBuilder.setCancelable(false);
                     alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
@@ -474,7 +528,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             context.finish();
                         }
                     });
-                    AlertDialog alert = alertDialogBuilder.create();
+                    final AlertDialog alert = alertDialogBuilder.create();
                     alert.show();
                 }
             });

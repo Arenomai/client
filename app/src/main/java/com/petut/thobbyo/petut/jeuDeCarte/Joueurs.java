@@ -48,25 +48,30 @@ public class Joueurs {
     }
 
     public void IA(List<Monstre> monstre, List<Defense> defense, Context contexte){
-        if(position == 0){
-            Random randomGenerator = new Random();
+        if (position == 0) {
             Random ran = new Random();
-            int randomInt = randomGenerator.nextInt(2);
+            int randomInt = ran.nextInt(2);
 
-            if(randomInt == 0) {
+            Carte cartePlacee = null;
+
+            if (randomInt == 0) {
                 int randY = randomInteger(0, 1, ran);
                 int randX = randomInteger(0, 4, ran);
                 Monstre mm = new Monstre(1, 1, randX, randY, 1, 2, 2, "Monstre pas bô", new Image(contexte, R.mipmap.monstre_sourire), 0);
-                mm.setBorderColors(Color.RED, Color.RED, Color.RED);
+                cartePlacee = mm;
                 monstre.add(mm);
             }
 
-            if(randomInt == 1){
+            if (randomInt == 1){
                 int randY = randomInteger(2, 3, ran);
                 int randX = randomInteger(0, 4, ran);
                 Defense dd = new Defense(1, 1, randX, randY, 4, 0, "MÛRE", new Image(contexte, R.mipmap.bleu_mur_icone_128), 0);
-                dd.setBorderColors(Color.RED, Color.RED, Color.RED);
+                cartePlacee = dd;
                 defense.add(dd);
+            }
+
+            if (cartePlacee != null) {
+                cartePlacee.setBorderColors(0xFFE00000, 0xFFC00000, 0xFFA00000);
             }
         }
     }
