@@ -1,5 +1,10 @@
 package com.petut.thobbyo.petut.jeuDeCarte;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
 /**
  * Created by Thobbyo on 21/11/2016.
  */
@@ -9,6 +14,7 @@ public class Defense extends Carte {
     public Defense(int tailleH, int tailleW,  int posX, int posY, int def, int damage, String nom, Image img, int appartenance) {
         super(tailleH, tailleW, posX, posY, img, nom, appartenance);
         this.def = def;
+        this.initDef = def;
         this.damage = damage;
         this.nom = nom;
     }
@@ -50,8 +56,15 @@ public class Defense extends Carte {
     }
 
     private int vitesse;
-    private int def;
+    private int def, initDef;
     private int damage;
     private String nom;
 
+    @Override
+    public void dessiner(Canvas canvas) {
+        super.dessiner(canvas);
+        final Paint p = new Paint();
+        p.setColor(0xFF00CC00);
+        canvas.drawRect(getBorder() * 2, 1 - getBorder()*3, getBorder() * 2 + (1 - getBorder()*4)*((float)def/initDef), 1 - getBorder()*2, p);
+    }
 }
