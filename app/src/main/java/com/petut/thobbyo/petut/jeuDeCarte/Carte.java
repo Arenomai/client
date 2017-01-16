@@ -21,6 +21,7 @@ public class Carte {
     protected int tailleH;
     protected int posX;
     protected int posY;
+    protected Context ctx;
     protected Image img;
 
     private final int borderColors[] = new int[3];
@@ -29,17 +30,29 @@ public class Carte {
     private int bw, cw;
     private Paint bordsPaint;
     private BitmapShader bordBS, coinBS;
+
+    private Paint couleurFond;
+
     protected int appartenance;
 
-    public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom, int appartenance){
+    public Carte(Context ctx) {
+        this.ctx = ctx;
+        setBorderColors(RED, GREEN, BLUE);
+    }
+
+    public Carte(Image img, String nom, int appartenance) {
+        this(img.getContext());
+        this.img = img;
+        this.img.load();
+        this.appartenance = appartenance;
+    }
+
+    public Carte(int tailleH, int tailleW, int posX, int posY, Image img, String nom, int appartenance) {
+        this(img, nom, appartenance);
         this.tailleH = tailleH;
         this.tailleW = tailleW;
         this.posX = posX;
         this.posY = posY;
-        this.img = img;
-        this.img.load();
-        this.appartenance = appartenance;
-        setBorderColors(RED, GREEN, BLUE);
     }
 
     private Bitmap replaceColors(final Bitmap src, int c1, int c2, int c3) {
@@ -63,7 +76,7 @@ public class Carte {
     }
 
     public void setBorderColors(int c1, int c2, int c3) {
-        final Context c = img.getContext();
+        final Context c = ctx;
         Drawable dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_bord);
         bmpBord = replaceColors(((BitmapDrawable) dr).getBitmap(), c1, c2, c3);
         dr = ContextCompat.getDrawable(c, R.drawable.bordure_carte_coin);
@@ -98,11 +111,10 @@ public class Carte {
 
     private void dessinerCadre(Canvas canvas) {
         final Matrix m = new Matrix();
-            /* Bords */
+        /* Bords */
         {
             bordsPaint.setShader(bordBS);
-            final float z = 11 * 3;
-            final float borderL = border, // * z/bmpCoin.getWidth(),
+            final float borderL = 0,
                     sx = border / bw, sy = sx * 2;
             // Gauche
             m.setScale(sx, sy);
@@ -125,16 +137,21 @@ public class Carte {
             bordBS.setLocalMatrix(m);
             canvas.drawRect(new RectF(borderL, 1 - border, 1 - borderL, 1), bordsPaint);
         }
-            /* Coins */
+        /* Coins */
         if (false) {
             bordsPaint.setShader(coinBS);
-            final int z = 5 * 3;
-            final float sx = border / bw, sy = sx;
+            // border / bw * 5*3 == sx * border * (cw/bw) / cw * 5*3
+            //       border / bw == sx * border * (cw/bw) / cw
+            //       border / bw == sx * border * 1/bw * cw / cw
+            //       border / bw == sx * border / bw
+            final float sx = border / cw, sy = sx;
             // Bas Gauche
             m.setScale(sx, sy);
             m.postTranslate(0, 1-sy);
-            coinBS.setLocalMatrix(m);
-            canvas.drawRect(new RectF(0, 1-sy, sx, 1), bordsPaint);
+            canvas.save();
+            canvas.concat(m);
+            canvas.drawRect(new RectF(0, 0, 1, 1), bordsPaint);
+            canvas.restore();
             // Haut Gauche
             m.setScale(sx/cw, -sy/cw);
             m.postTranslate(0, sy);
@@ -154,8 +171,17 @@ public class Carte {
     }
 
     public void dessiner(Canvas canvas) {
-        canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
+        if (img != null) {
+            canvas.drawBitmap(img.getBitmap(), null, new Rect(0, 0, 1, 1), null);
+        }
+        if (couleurFond != null) {
+            canvas.drawRect(0, 0, 1, 1, couleurFond);
+        }
         dessinerCadre(canvas);
+    }
+
+    public void setCouleurFond(Paint couleurFond) {
+        this.couleurFond = couleurFond;
     }
 
     public Image getImg(){return img ;}

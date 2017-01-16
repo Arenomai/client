@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, GameActivity.class);
             startActivity(intent);
             finish();
         }else {
