@@ -21,7 +21,6 @@
         android:textAlignment="center"
         android:textSize="36sp"
         android:textColor="@android:color/black"
-        android:layout_below="@+id/view4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -45,83 +44,104 @@
         android:layout_width="match_parent"
         android:layout_height="30dp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <ScrollView
         android:layout_width="match_parent"
-        android:background="@drawable/about_selector_eltw"
-        android:layout_height="18pt">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/elementw"
-            android:layout_weight="1"
-            android:paddingTop="4dip"
-            android:paddingBottom="4dip" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-        <TextView
-            android:text="Dorian Wouters"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textAlignment="center"
-            android:textStyle="normal|bold"
-            android:layout_weight="1"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:textSize="14pt" />
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:background="@drawable/about_selector_eltw"
+                android:layout_height="18pt">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/elementw"
+                    android:layout_weight="1"
+                    android:paddingTop="4dip"
+                    android:paddingBottom="4dip" />
 
-    <TextView
-        android:text="Thomas Gros"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:gravity="center"
-        android:layout_height="18pt"
-        android:textSize="14pt" />
+                <TextView
+                    android:text="Dorian Wouters"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textStyle="normal|bold"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textSize="14pt" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+            </LinearLayout>
 
-    <TextView
-        android:text="Maya Friedrichs"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:gravity="center"
-        android:layout_height="18pt"
-        android:textSize="14pt" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="1" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+            <TextView
+                android:text="Thomas Gros"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:gravity="center"
+                android:layout_height="18pt"
+                android:textSize="14pt"
+                android:layout_weight="1" />
 
-    <TextView
-        android:text="Nicolas Perdrix"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:gravity="center"
-        android:layout_height="18pt"
-        android:textSize="14pt" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="1" />
 
+            <TextView
+                android:text="Maya Friedrichs"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:gravity="center"
+                android:layout_height="18pt"
+                android:textSize="14pt"
+                android:layout_weight="1" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="1" />
 
-    <TextView
-        android:text="Thomas Lecouffe"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:gravity="center"
-        android:layout_height="18pt"
-        android:textSize="14pt" />
+            <TextView
+                android:text="Nicolas Perdrix"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:gravity="center"
+                android:layout_height="18pt"
+                android:textSize="14pt"
+                android:layout_weight="1" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Thomas Lecouffe"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:gravity="center"
+                android:layout_height="18pt"
+                android:textSize="14pt"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
