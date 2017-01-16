@@ -1,0 +1,18 @@
+  Compte: avoir de l'XP +gameplay @client @serveur id:xp +xp
+  Compte: avoir de l'argent (PO?) +gameplay @client @serveur id:argent +argent
+  Vrai système d'inventaire synchro avec le @serveur +gameplay @client
+  Nettoyer GameView, déplacer une partie de la logique de jeu +code @client
+  Nettoyer les classes de cartes +code @client
+  Reprise de connexion si cassée +résilience +réseau @client @serveur
+  Stabilité GPS +gps +résilience @client
+  Regénération d'évènements lors de mouvements +résilience +réseau @client @serveur
+  Différents types de cartes +gameplay +art @client
+  Envoyer les résultats des +combat du @client au @serveur
+  Gagner de l' +xp après les +combat @client @serveur dep:xp
+  Gagner de l' +argent après les +combat @client @serveur dep:argent
+  Deck de cartes scrollable in-game +gameplay
+  Plateau plus intuitif +gameplay
+  Plateau plus joli +art
+  Pose d'objets dans le monde +gameplay @client @serveur
+  Tuyau TLSv1.2 (ECDHE) pour la communication serveur, avec le certif Let's Encrypt si possible +securité +réseau @client @serveur
+  Échange de mot de passe via Secure Remote Password +securité +réseau @client @serveur
