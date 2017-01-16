@@ -455,10 +455,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             //on change le message en fonction de si le joueurs  a gagner ou perdu.
             String msg = "";
             if(ami.getPv() < 0){
-                msg = "Vous êtes vraiment une tanche...\n Vous avez perdu contre une IA qui joue random.";
+                msg = "Vous n'êtes pas vraiment fort...\n Vous avez perdu contre une IA qui joue random.";
             }
             if(ennemi.getPv() < 0){
-                msg = "Vous êtes vraiment une exeption...\n Vous avez gagnez contre une IA qui joue random.";
+                msg = "Vous êtes vraiment une exception...\n Vous avez gagné contre une IA qui joue random.";
             }
             final String MSG = msg;
 
