@@ -40,8 +40,10 @@
         <activity
             android:name=".TCPActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GameActivity" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity
+            android:name=".GameActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".AboutActivity" />
     </application>
 
 </manifest>
