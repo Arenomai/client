@@ -49,7 +49,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@drawable/about_selector_eltw"
-        android:layout_height="64dip">
+        android:layout_height="18pt">
 
         <ImageView
             android:layout_width="0dp"
@@ -65,10 +65,10 @@
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:textStyle="normal|bold"
-            android:textSize="28sp"
             android:layout_weight="1"
             android:textColor="@android:color/white"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="14pt" />
     </LinearLayout>
 
     <Space
@@ -78,11 +78,11 @@
     <TextView
         android:text="Thomas Gros"
         android:layout_width="match_parent"
-        android:layout_height="64dip"
         android:textAlignment="center"
         android:textStyle="normal|bold"
-        android:textSize="28sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_height="18pt"
+        android:textSize="14pt" />
 
     <Space
         android:layout_width="match_parent"
@@ -91,11 +91,11 @@
     <TextView
         android:text="Maya Friedrichs"
         android:layout_width="match_parent"
-        android:layout_height="64dip"
         android:textAlignment="center"
         android:textStyle="normal|bold"
-        android:textSize="28sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_height="18pt"
+        android:textSize="14pt" />
 
     <Space
         android:layout_width="match_parent"
@@ -104,11 +104,11 @@
     <TextView
         android:text="Nicolas Perdrix"
         android:layout_width="match_parent"
-        android:layout_height="64dip"
         android:textAlignment="center"
         android:textStyle="normal|bold"
-        android:textSize="28sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_height="18pt"
+        android:textSize="14pt" />
 
 
     <Space
@@ -118,10 +118,10 @@
     <TextView
         android:text="Thomas Lecouffe"
         android:layout_width="match_parent"
-        android:layout_height="64dip"
         android:textAlignment="center"
         android:textStyle="normal|bold"
-        android:textSize="28sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_height="18pt"
+        android:textSize="14pt" />
 
 </LinearLayout>
