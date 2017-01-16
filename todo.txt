@@ -16,3 +16,4 @@
   Pose d'objets dans le monde +gameplay @client @serveur
   Tuyau TLSv1.2 (ECDHE) pour la communication serveur, avec le certif Let's Encrypt si possible +securité +réseau @client @serveur
   Échange de mot de passe via Secure Remote Password +securité +réseau @client @serveur
+  Initialisation de co +réseau au travers d'HTTP/1.1 @client pour reverse proxy via Apache @serveur +résilience
