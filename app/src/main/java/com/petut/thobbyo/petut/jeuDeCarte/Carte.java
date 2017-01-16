@@ -109,6 +109,10 @@ public class Carte {
         border = b;
     }
 
+    public float getBorder() {
+        return border;
+    }
+
     private void dessinerCadre(Canvas canvas) {
         final Matrix m = new Matrix();
         /* Bords */
