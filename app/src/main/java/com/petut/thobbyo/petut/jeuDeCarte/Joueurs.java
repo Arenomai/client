@@ -8,6 +8,8 @@ import com.petut.thobbyo.petut.R;
 import java.util.List;
 import java.util.Random;
 
+import static android.R.attr.y;
+
 /**
  * Created by Thobbyo on 14/01/2017.
  */
@@ -51,28 +53,56 @@ public class Joueurs {
         if (position == 0) {
             Random ran = new Random();
             int randomInt = ran.nextInt(2);
-
             Carte cartePlacee = null;
 
             if (randomInt == 0) {
                 int randY = randomInteger(0, 1, ran);
                 int randX = randomInteger(0, 4, ran);
-                Monstre mm = new Monstre(1, 1, randX, randY, 1, 2, 2, "Monstre pas bô", new Image(contexte, R.mipmap.monstre_sourire), 0);
-                cartePlacee = mm;
-                monstre.add(mm);
+
+                boolean pasOcuper = true;
+
+                synchronized (monstre) {
+                    for (Monstre m : monstre) {
+                        if (m.getPosY() == randY && m.getPosX() == randX) {
+                            pasOcuper = false;
+                        }
+                    }
+                }
+                if(pasOcuper){
+                    Monstre mm = new Monstre(1, 1, randX, randY, 1, 2, 2, "Monstre pas bô", new Image(contexte, R.mipmap.monstre_sourire), 0);
+                    cartePlacee = mm;
+                    monstre.add(mm);
+                }
             }
 
             if (randomInt == 1){
                 int randY = randomInteger(2, 3, ran);
                 int randX = randomInteger(0, 4, ran);
-                Defense dd = new Defense(1, 1, randX, randY, 4, 0, "MÛRE", new Image(contexte, R.mipmap.bleu_mur_icone_128), 0);
-                cartePlacee = dd;
-                defense.add(dd);
+
+                boolean pasOcuper = true;
+
+                synchronized (defense) {
+                    for (Defense d : defense) {
+                        if (d.getPosY() == randY && d.getPosX() == randX) {
+                            pasOcuper = false;
+                        }
+                    }
+                }
+
+                if(pasOcuper){
+                    Defense dd = new Defense(1, 1, randX, randY, 4, 0, "MÛRE", new Image(contexte, R.mipmap.bleu_mur_icone_128), 0);
+                    cartePlacee = dd;
+                    defense.add(dd);
+                }
+
+
             }
+
 
             if (cartePlacee != null) {
                 cartePlacee.setBorderColors(0xFFE00000, 0xFFC00000, 0xFFA00000);
             }
+
         }
     }
 }
