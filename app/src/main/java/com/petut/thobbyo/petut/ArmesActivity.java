@@ -125,7 +125,7 @@ public class ArmesActivity extends AppCompatActivity {
                     //    Toast.makeText(getApplicationContext(), "Dépose interdite, objet en cours d'usage", Toast.LENGTH_SHORT).show();
                     //}
                     //else {
-                        Toast.makeText(getApplicationContext(), "Objet déposé : " + monArme.getTitre(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.on_ground_object + monArme.getTitre(), Toast.LENGTH_SHORT).show();
 
                         // POUR LE SERVEUR : dire quel objet a été déposé sur la carte.
 

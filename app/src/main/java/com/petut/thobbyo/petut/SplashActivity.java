@@ -26,9 +26,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private void showGPSDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Le GPS n'a pas été activé sur votre appareil, vous devez l'activer maintenant pour pouvoir jouer au jeu. Voulez-vous l'activer maintenant ?")
+        alertDialogBuilder.setMessage(R.string.gps_not_activated)
                 .setCancelable(false)
-                .setPositiveButton("Activer GPS",
+                .setPositiveButton(R.string.gps_activation,
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 Intent callGPSSettingIntent = new Intent(
@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                                 System.exit(0);
                                 }
                         });
-        alertDialogBuilder.setNegativeButton("Quitter le jeu",
+        alertDialogBuilder.setNegativeButton(R.string.leave_game,
                 new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         dialog.cancel();

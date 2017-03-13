@@ -17,25 +17,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.petut.thobbyo.petut.MainMenuView"
-        android:id="@+id/view4"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/view4" />
 
     <TextView
-        android:text="Attaque et défense"
+        android:text="@string/armes_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView9"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:textColor="@android:color/black"
-        android:layout_below="@+id/view4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textColor="@android:color/black" />
 
     <TextView
-        android:text="Sélectionnez une arme d'attaque et une de défense."
+        android:text="@string/armes_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
@@ -48,7 +42,6 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView9"
         android:id="@+id/grille"
         android:numColumns="3" />
 

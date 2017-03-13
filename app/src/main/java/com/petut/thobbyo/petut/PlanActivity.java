@@ -135,7 +135,7 @@ public class PlanActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 PlanActivity.this.startActivity(intent);
 
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Objet récupéré : " + obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), R.string.object_picked + obj.getObjet().getTitre(), Toast.LENGTH_SHORT).show();
                                                 mapboxMap.removeMarker(marker);
 
                                                 // POUR LE SERVEUR : Dire au serveur quel objet a été récupéré dans l'inventaire

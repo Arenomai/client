@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Arenomai</string>
+    <string name="style_mapbox_streets">mapbox://styles/elementw/civs7p1y900bj2kqkv71t0kwr</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="credit_title">Jeu réalisé dans le cadre de notre projet tutoré avec Mme Joubert.</string>
+    <string name="credit_licence">Licence GNU GPL v3.</string>
+    <string name="armes_title">Attaque et défense</string>
+    <string name="armes_subtitle">Sélectionnez une arme d\'attaque et une de défense.</string>
+    <string name="cartes">Cartes</string>
+    <string name="cartes_subtitle">Sélectionnez cinq cartes.</string>
+    <string name="game_next">Tour Suivant</string>
+    <string name="login_connect">Connexion</string>
+    <string name="login_username">Identifiant</string>
+    <string name="login_password">Mot de passe</string>
+    <string name="login_server_port">Serveur : port</string>
+    <string name="profile_bio">Biographie</string>
+    <string name="profile_id">ID :</string>
+    <string name="profile_update">Mettre à jour</string>
+    <string name="profile_title">Profil</string>
+    <string name="profile_nickname">Pseudonyme</string>
+    <string name="profile_disconnect">Se déconnecter</string>
+    <string name="tcp_send">Envoi</string>
+    <string name="choose_pass_usern">Veuillez entrer un pseudonyme et un mot de passe</string>
+    <string name="pass_not_correct">Mot de passe incorrect</string>
+    <string name="update_done">Mise à jour effectuée</string>
+    <string name="disconnecting">Déconnexion</string>
+    <string name="object_picked">"Objet récupéré : "</string>
+    <string name="on_ground_object">"Objet déposé : "</string>
+    <string name="damages">"Dégat : "</string>
+    <string name="protection">"Protection : "</string>
+    <string name="gps_not_activated">Le GPS n\'a pas été activé sur votre appareil, vous devez l\'activer maintenant pour pouvoir jouer au jeu. Voulez-vous l\'activer maintenant ?</string>
+    <string name="gps_activation">Aller à la page d\'activation du GPS</string>
+    <string name="leave_game">Quitter le jeu</string>
+</resources>

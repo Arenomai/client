@@ -49,7 +49,7 @@ public class ProfilActivity extends AppCompatActivity {
                         String bio = editTextBio.getText().toString();
                         new UserAccountInfoUpdater(getApplicationContext(), Application.getServerConnection()).execute(nick, bio);
                         int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(getApplicationContext(), "Mise à jour effectuée", duration);
+                        Toast toast = Toast.makeText(getApplicationContext(), R.string.update_done, duration);
                         toast.show();
                     }
                 });
@@ -64,7 +64,7 @@ public class ProfilActivity extends AppCompatActivity {
                         } catch (IOException e) {
                         }
                         int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(getApplicationContext(), "Déconnexion", duration);
+                        Toast toast = Toast.makeText(getApplicationContext(), R.string.disconnecting, duration);
                         toast.show();
                         Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                         ComponentName cn = intent.getComponent();
