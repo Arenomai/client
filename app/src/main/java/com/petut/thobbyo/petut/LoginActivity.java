@@ -68,10 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (txt_username.getText().toString().equals("") ||
                     txt_password.getText().toString().equals("")) {
                     Context context = getApplicationContext();
-                    CharSequence text = "Veuillez entrer un pseudo et un mot de passe";
                     int duration = Toast.LENGTH_SHORT;
 
-                    Toast toast = Toast.makeText(context, text, duration);
+                    Toast toast = Toast.makeText(context, R.string.choose_pass_usern, duration);
                     toast.show();
                 } else {
                     final SharedPreferences.Editor spe = sp.edit();
@@ -108,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(getApplicationContext(), "Mot de passe incorrect", duration);
+                    Toast toast = Toast.makeText(getApplicationContext(), "@string/pass_not_correct", duration);
                     toast.show();
                 }
             }

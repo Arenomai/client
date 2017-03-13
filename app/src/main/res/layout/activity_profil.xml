@@ -20,7 +20,7 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="Profil"
+        android:text="@string/profile_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView9"
@@ -45,7 +45,7 @@
             android:layout_margin="10dp" />
 
         <TextView
-            android:text="ID : "
+            android:text="@string/profile_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView13"
@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView11"
-            android:text="Pseudonyme" />
+            android:text="@string/profile_nickname" />
 
         <EditText
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
             android:layout_margin="10dp" />
 
         <TextView
-            android:text="Biographie"
+            android:text="@string/profile_bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView12" />
@@ -94,7 +94,7 @@
             android:id="@+id/editTextBio" />
 
         <Button
-            android:text="Mettre à jour"
+            android:text="@string/profile_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buttonProfil" />
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:text="Se déconnecter"
+            android:text="@string/profile_disconnect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDeconnection" />

@@ -1,6 +1,7 @@
 package com.petut.thobbyo.petut;
 
 import android.content.Context;
+import android.content.Context.*;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,10 +25,10 @@ public class ArmeView extends LinearLayout {
 
         titre.setText(strTitre);
         if(attaque) {
-            desc.setText("Dégat : " + Integer.toString(taux));
+            desc.setText(getResources().getString(R.string.damages)+Integer.toString(taux));
         }
         else {
-            desc.setText("Protection : " + Integer.toString(taux));
+            desc.setText(getResources().getString(R.string.protection)+Integer.toString(taux));
         }
         image.setImageResource(res_image);
     }

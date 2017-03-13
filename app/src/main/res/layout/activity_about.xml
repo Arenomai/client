@@ -21,11 +21,10 @@
         android:textAlignment="center"
         android:textSize="36sp"
         android:textColor="@android:color/black"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        tools:ignore="HardcodedText" />
 
     <TextView
-        android:text="Jeu réalisé dans le cadre de notre projet tutoré avec Mme Joubert."
+        android:text="@string/credit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -37,10 +36,11 @@
         android:layout_height="10dp" />
 
     <TextView
-        android:text="Licence GNU GPL v3."
+        android:text="@string/credit_licence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:id="@+id/textView" />
 
     <Space
         android:layout_width="match_parent"
@@ -67,7 +67,8 @@
                     app:srcCompat="@drawable/elementw"
                     android:layout_weight="1"
                     android:paddingTop="4dip"
-                    android:paddingBottom="4dip" />
+                    android:paddingBottom="4dip"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:text="Dorian Wouters"
@@ -78,7 +79,8 @@
                     android:layout_weight="1"
                     android:textColor="@android:color/white"
                     android:gravity="center"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -95,7 +97,8 @@
                 android:gravity="center"
                 android:layout_height="18pt"
                 android:textSize="14pt"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="HardcodedText" />
 
             <Space
                 android:layout_width="match_parent"
@@ -110,7 +113,8 @@
                 android:gravity="center"
                 android:layout_height="18pt"
                 android:textSize="14pt"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="HardcodedText" />
 
             <Space
                 android:layout_width="match_parent"
@@ -125,7 +129,8 @@
                 android:gravity="center"
                 android:layout_height="18pt"
                 android:textSize="14pt"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="HardcodedText" />
 
             <Space
                 android:layout_width="match_parent"
@@ -140,7 +145,8 @@
                 android:gravity="center"
                 android:layout_height="18pt"
                 android:textSize="14pt"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </ScrollView>

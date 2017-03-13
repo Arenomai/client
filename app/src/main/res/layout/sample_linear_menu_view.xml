@@ -18,7 +18,8 @@
         android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/menu_plan"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/profil"
@@ -30,7 +31,8 @@
         android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/menu_moi"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/defense"
@@ -42,7 +44,8 @@
         android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/menu_armes"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cartes"
@@ -54,7 +57,8 @@
         android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/menu_cartes"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/tcp"
@@ -66,6 +70,7 @@
         android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/menu_about"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>
