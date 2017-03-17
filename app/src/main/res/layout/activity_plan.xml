@@ -5,7 +5,7 @@
     android:id="@+id/activity_maps_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.petut.thobbyo.petut.PlanActivity">
+    tools:context="com.petut.thobbyo.arenomai.PlanActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         <view
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            class="com.petut.thobbyo.petut.MainMenuView"
+            class="com.petut.thobbyo.arenomai.MainMenuView"
             android:id="@+id/view"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"

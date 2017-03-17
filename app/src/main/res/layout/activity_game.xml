@@ -14,7 +14,7 @@
         <view
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            class="com.petut.thobbyo.petut.jeuDeCarte.GameView"
+            class="com.petut.thobbyo.arenomai.jeuDeCarte.GameView"
             android:id="@+id/ViewGame" />
 
         <Button

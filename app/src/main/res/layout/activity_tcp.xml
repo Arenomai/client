@@ -9,13 +9,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.petut.thobbyo.petut.TCPActivity">
+    tools:context="com.petut.thobbyo.arenomai.TCPActivity">
 
 
     <view
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        class="com.petut.thobbyo.petut.MainMenuView"
+        class="com.petut.thobbyo.arenomai.MainMenuView"
         android:id="@+id/view4"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
