@@ -5,13 +5,13 @@
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.petut.thobbyo.petut.AboutActivity"
+    tools:context="com.petut.thobbyo.arenomai.AboutActivity"
     android:orientation="vertical"
     android:weightSum="1">
     <view
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        class="com.petut.thobbyo.petut.MainMenuView"
+        class="com.petut.thobbyo.arenomai.MainMenuView"
         android:padding="16dp" />
 
     <TextView
